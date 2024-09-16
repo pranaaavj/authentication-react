@@ -148,17 +148,26 @@ export const SignUp = () => {
         </Link>
       </div>
       <div className='mt-3'>
-        {error &&
-          error.message.map((msg) => {
-            return (
-              <Alert
-                key={msg}
-                variant='danger'
-                className='text-center'>
-                {msg}
-              </Alert>
-            );
-          })}
+        {error ? (
+          Array.isArray(error?.message) ? (
+            error?.message.map((msg) => {
+              return (
+                <Alert
+                  key={msg}
+                  variant='danger'
+                  className='text-center'>
+                  {msg}
+                </Alert>
+              );
+            })
+          ) : (
+            <Alert
+              variant='danger'
+              className='text-center'>
+              {error.message}
+            </Alert>
+          )
+        ) : null}
         {success && (
           <Alert
             variant='success'

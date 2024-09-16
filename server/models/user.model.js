@@ -42,4 +42,8 @@ UserSchema.pre('save', async function (next) {
   this.password = hashedPassword; // replacing the password with hashed password
 });
 
+UserSchema.methods.comparePassword = async function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
 export default mongoose.model('User', UserSchema);

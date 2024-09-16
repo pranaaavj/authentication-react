@@ -22,7 +22,7 @@ const errorHandler = (err, req, res, next) => {
   res.status(customError.statusCode).json({
     success: false,
     message: customError.message,
-    statusCode: customError.statusCode,
+    data: null,
   });
 };
 
