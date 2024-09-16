@@ -13,6 +13,12 @@ const errorHandler = (err, req, res, next) => {
     customError.statusCode = 409;
   }
 
+  // Handling mongoose validation error
+  if (err.name === 'ValidationError') {
+    customError.message = Object.values(err.errors).map((err) => err.message);
+    customError.statusCode = 400;
+  }
+
   res.status(customError.statusCode).json({
     success: false,
     message: customError.message,

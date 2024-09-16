@@ -8,7 +8,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Username cannot be empty'], // Ensuring no empty value
       unique: [true, 'Username already exists'], // Ensuring no duplicate value
-      max: [14, 'Username cannot exceed 14 characters'], //Max characters
+      max: [14, 'Username cannot exceed 14 characters'], // Max characters
+      match: [
+        /^[a-zA-Z0-9_]+$/,
+        'Username can only contain letters, numbers, and underscores, without spaces',
+      ], // Match regex for validation
       trim: true, // Trim whitespace
     },
     email: {
@@ -24,7 +28,7 @@ const UserSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, 'Password cannot be empty'],
-      max: [20, 'Password cannot exceed 14 characters'],
+      maxlength: [20, 'Password cannot exceed 14 characters'],
       trim: true,
     },
   },
