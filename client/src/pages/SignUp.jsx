@@ -18,6 +18,7 @@ export const SignUp = () => {
     email: '',
     password: '',
   });
+  console.log('hi');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [signUp, { isLoading, isSuccess, data }] = useSignUpMutation();
