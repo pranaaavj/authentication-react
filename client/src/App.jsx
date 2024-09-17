@@ -2,6 +2,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { About, Home, SignIn, SignUp } from './pages';
 import MainLayout from './layouts/MainLayout';
 
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -16,5 +19,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  );
 }

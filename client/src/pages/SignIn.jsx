@@ -1,11 +1,10 @@
-import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
+import ErrorMessages from '../components/ErrorMessages';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSignInMutation } from '../api/auth';
+import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 export const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -16,43 +15,46 @@ export const SignIn = () => {
     email: '',
     password: '',
   });
-  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const [signIn, { isLoading }] = useSignInMutation();
+
+  useEffect(() => {
+    setError(null);
+    setValidation({
+      email: '',
+      password: '',
+    });
+  }, [formData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let newErrors = {
+    let newValidation = {
       email: '',
       password: '',
     };
     let valid = true;
     //checking for empty fields
     if (!formData.email.trim()) {
-      newErrors.email = 'Email Cannot be empty';
+      newValidation.email = 'Email Cannot be empty';
       valid = false;
     }
     if (!formData.password.trim()) {
-      newErrors.password = 'Password Cannot be empty';
+      newValidation.password = 'Password Cannot be empty';
       valid = false;
     }
     // if any field empty, cancel submission
     if (!valid) {
-      setValidation(newErrors);
-      setError(null);
+      setValidation(newValidation);
       return;
     }
     // sending form data to create user
     try {
-      setLoading(true);
-      const response = await axios.post(
-        'http://localhost:3000/api/auth/signin',
-        formData,
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-      console.log(response.data);
-      if (response?.data?.status == 'success') {
+      const response = await signIn(formData).unwrap();
+      console.log(response);
+      if (response?.success) {
         navigate('/');
       }
       setFormData({
@@ -60,22 +62,17 @@ export const SignIn = () => {
         password: '',
       });
     } catch (error) {
-      console.log(error);
-      setError(error?.response?.data);
-    } finally {
-      setLoading(false);
-      setValidation({
-        email: '',
-        password: '',
-      });
+      setError(
+        error?.data?.message || 'Something went wrong, Please try again'
+      );
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData({ ...formData, [name]: value });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
         <Spinner
@@ -117,9 +114,9 @@ export const SignIn = () => {
         <SubmitButton
           variant='secondary'
           type='submit'
-          text='Sign up'
+          text='Sign in'
           className='uppercase'
-          disabled={loading}
+          disabled={isLoading}
         />
       </Form>
       <div className='flex justify-center gap-2 mt-3 font-medium'>
@@ -129,26 +126,7 @@ export const SignIn = () => {
         </Link>
       </div>
       <div className='mt-3'>
-        {error ? (
-          Array.isArray(error?.message) ? (
-            error?.message.map((msg) => {
-              return (
-                <Alert
-                  key={msg}
-                  variant='danger'
-                  className='text-center'>
-                  {msg}
-                </Alert>
-              );
-            })
-          ) : (
-            <Alert
-              variant='danger'
-              className='text-center'>
-              {error.message}
-            </Alert>
-          )
-        ) : null}
+        <ErrorMessages error={error} />
       </div>
     </div>
   );

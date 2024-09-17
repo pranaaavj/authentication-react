@@ -17,7 +17,7 @@ export const signup = async (req, res) => {
     success: true,
     message: 'User Created',
     data: null,
-  });
+  }); //Todo Check for user exists
 };
 /**
  * @route POST /api/user/signin
@@ -68,6 +68,6 @@ export const refresh = async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Access token created',
-    data: { accessToken },
+    data: { accessToken, user },
   });
 };

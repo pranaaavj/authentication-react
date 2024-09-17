@@ -7,9 +7,9 @@ const errorHandler = (err, req, res, next) => {
 
   // Handling mongoose duplicate value errors
   if (err.code || err.code === 11000) {
-    customError.message = `The value for field ${Object.keys(
+    customError.message = `This ${Object.keys(
       err.keyValue
-    )} already exists, Please enter another value`;
+    )} already exists, Please log in or enter another value`;
     customError.statusCode = 409;
   }
 

@@ -1,10 +1,11 @@
-import { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
+import ErrorMessages from '../components/ErrorMessages';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSignUpMutation } from '../api/auth';
+import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 export const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -17,9 +18,18 @@ export const SignUp = () => {
     email: '',
     password: '',
   });
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const navigate = useNavigate();
+  const [signUp, { isLoading, isSuccess, data }] = useSignUpMutation();
+
+  useEffect(() => {
+    setError(null);
+    setValidation({
+      username: '',
+      email: '',
+      password: '',
+    });
+  }, [formData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,19 +56,17 @@ export const SignUp = () => {
     // if any field empty, cancel submission
     if (!valid) {
       setValidation(newErrors);
-      setSuccess(null);
       return;
     }
     // sending form data to create user
     try {
-      setLoading(true);
-      const response = await axios.post(
-        'http://localhost:3000/api/auth/signup',
-        formData,
-        { headers: { 'Content-Type': 'application/json' } }
-      );
-      if (response?.data) {
-        setSuccess(response?.data?.message);
+      await signUp(formData).unwrap();
+      const response = data;
+      console.log(response);
+      if (response?.success) {
+        setTimeout(() => {
+          navigate('/sign-in');
+        }, 1000);
       }
       setFormData({
         username: '',
@@ -66,23 +74,17 @@ export const SignUp = () => {
         password: '',
       });
     } catch (error) {
-      setError(error?.response?.data);
-      setSuccess(null);
-    } finally {
-      setLoading(false);
-      setValidation({
-        username: '',
-        email: '',
-        password: '',
-      });
+      setError(
+        error?.data?.message || 'Something went wrong, Please try again'
+      );
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData({ ...formData, [name]: value });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className='flex justify-center items-center h-screen'>
         <Spinner
@@ -138,7 +140,7 @@ export const SignUp = () => {
           type='submit'
           text='Sign up'
           className='uppercase'
-          disabled={loading}
+          disabled={isLoading}
         />
       </Form>
       <div className='flex justify-center gap-2 mt-3 font-medium'>
@@ -148,31 +150,12 @@ export const SignUp = () => {
         </Link>
       </div>
       <div className='mt-3'>
-        {error ? (
-          Array.isArray(error?.message) ? (
-            error?.message.map((msg) => {
-              return (
-                <Alert
-                  key={msg}
-                  variant='danger'
-                  className='text-center'>
-                  {msg}
-                </Alert>
-              );
-            })
-          ) : (
-            <Alert
-              variant='danger'
-              className='text-center'>
-              {error.message}
-            </Alert>
-          )
-        ) : null}
-        {success && (
+        <ErrorMessages error={error} />
+        {isSuccess && (
           <Alert
-            variant='success'
+            variant='danger'
             className='text-center'>
-            {success}
+            {data.message}
           </Alert>
         )}
       </div>

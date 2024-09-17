@@ -1,14 +1,15 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import uniqueValidator from 'mongoose-unique-validator';
 
 // Define the User Schema
 const UserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: [true, 'Username cannot be empty'], // Ensuring no empty value
-      unique: [true, 'Username already exists'], // Ensuring no duplicate value
-      max: [14, 'Username cannot exceed 14 characters'], // Max characters
+      required: true,
+      unique: true,
+      maxlength: [14, 'Username cannot exceed 14 characters'], // Max characters
       match: [
         /^[a-zA-Z0-9_]+$/,
         'Username can only contain letters, numbers, and underscores, without spaces',
@@ -17,8 +18,8 @@ const UserSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'Email cannot be empty'],
-      unique: [true, 'Email already exists'],
+      required: true,
+      unique: true,
       match: [
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         'Please provide a valid email',
@@ -27,19 +28,27 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, 'Password cannot be empty'],
-      maxlength: [20, 'Password cannot exceed 14 characters'],
-      trim: true,
+      required: true,
+      maxlength: [20, 'Password cannot exceed 20 characters'],
     },
   },
   { timestamps: true } // Automatic createdAt and createdBy
 );
 
+UserSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+    delete ret._id;
+    delete ret.password;
+  },
+});
+
 UserSchema.pre('save', async function (next) {
-  if (!this.isModified()) next(); // Only hash again if the document is modified
+  if (!this.isModified('password')) next(); // Only hash again if the document is modified
   const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(this.password, salt);
-  this.password = hashedPassword; // replacing the password with hashed password
+  this.password = await bcrypt.hash(this.password, salt); // replacing the password with hashed password
+  next();
 });
 
 UserSchema.methods.comparePassword = async function (password) {
