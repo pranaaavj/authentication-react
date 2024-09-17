@@ -1,5 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
+import { setUser } from '../redux/slices/userSlice';
 import ErrorMessages from '../components/ErrorMessages';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,6 +9,10 @@ import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
 
 export const SignIn = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [signIn, { isLoading }] = useSignInMutation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,10 +21,6 @@ export const SignIn = () => {
     email: '',
     password: '',
   });
-
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const [signIn, { isLoading }] = useSignInMutation();
 
   useEffect(() => {
     setError(null);
@@ -57,11 +58,12 @@ export const SignIn = () => {
 
       if (response?.success) {
         navigate('/');
+        dispatch(setUser(response.data));
+      } else {
+        setError(
+          response?.error?.message || 'Something went wrong, Please try again'
+        );
       }
-      setFormData({
-        email: '',
-        password: '',
-      });
     } catch (error) {
       setError(
         error?.data?.message || 'Something went wrong, Please try again'

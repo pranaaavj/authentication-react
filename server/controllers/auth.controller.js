@@ -46,7 +46,7 @@ export const signin = async (req, res) => {
     .json({
       success: true,
       message: 'User logged in',
-      data: { accessToken },
+      data: { accessToken, user },
     });
 };
 /**
