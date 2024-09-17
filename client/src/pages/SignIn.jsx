@@ -1,6 +1,7 @@
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorMessages from '../components/ErrorMessages';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
@@ -53,7 +54,7 @@ export const SignIn = () => {
     // sending form data to create user
     try {
       const response = await signIn(formData).unwrap();
-      console.log(response);
+
       if (response?.success) {
         navigate('/');
       }
