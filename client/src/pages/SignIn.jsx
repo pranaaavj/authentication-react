@@ -16,12 +16,11 @@ export const SignIn = () => {
     password: '',
   });
 
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [signIn, { isLoading }] = useSignInMutation();
+  const [signIn, { isLoading, isError, isSuccess, error }] =
+    useSignInMutation();
 
   useEffect(() => {
-    setError(null);
     setValidation({
       email: '',
       password: '',
@@ -51,22 +50,14 @@ export const SignIn = () => {
       return;
     }
     // sending form data to create user
-    try {
-      const response = await signIn(formData).unwrap();
-      console.log(response);
-      if (response?.success) {
-        navigate('/');
-      }
-      setFormData({
-        email: '',
-        password: '',
-      });
-    } catch (error) {
-      setError(
-        error?.data?.message || 'Something went wrong, Please try again'
-      );
-    }
+    signIn(formData);
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/');
+    }
+  }, [isSuccess, navigate]);
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData({ ...formData, [name]: value });
@@ -126,7 +117,7 @@ export const SignIn = () => {
         </Link>
       </div>
       <div className='mt-3'>
-        <ErrorMessages error={error} />
+        {isError && <ErrorMessages error={error?.data?.message} />}
       </div>
     </div>
   );

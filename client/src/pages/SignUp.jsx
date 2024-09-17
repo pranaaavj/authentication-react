@@ -18,19 +18,26 @@ export const SignUp = () => {
     email: '',
     password: '',
   });
-  console.log('hi');
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const [signUp, { isLoading, isSuccess, data }] = useSignUpMutation();
+  const [signUp, { isLoading, isSuccess, isError, error, data }] =
+    useSignUpMutation();
 
   useEffect(() => {
-    setError(null);
     setValidation({
       username: '',
       email: '',
       password: '',
     });
   }, [formData]);
+
+  // Redirecting if user authenticated
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => {
+        navigate('/sign-in');
+      }, 1000);
+    }
+  }, [isSuccess, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +48,7 @@ export const SignUp = () => {
       password: '',
     };
     let valid = true;
-    //checking for empty fields
+    // Checking for empty fields
     if (!formData.email.trim()) {
       newErrors.email = 'Email Cannot be empty';
       valid = false;
@@ -54,31 +61,13 @@ export const SignUp = () => {
       newErrors.username = 'Username Cannot be empty';
       valid = false;
     }
-    // if any field empty, cancel submission
+    // If any field empty, cancel submission
     if (!valid) {
       setValidation(newErrors);
       return;
     }
-    // sending form data to create user
-    try {
-      await signUp(formData).unwrap();
-      const response = data;
-      console.log(response);
-      if (response?.success) {
-        setTimeout(() => {
-          navigate('/sign-in');
-        }, 1000);
-      }
-      setFormData({
-        username: '',
-        email: '',
-        password: '',
-      });
-    } catch (error) {
-      setError(
-        error?.data?.message || 'Something went wrong, Please try again'
-      );
-    }
+    // Sending form data to create user
+    signUp(formData);
   };
 
   const handleChange = ({ target: { name, value } }) => {
@@ -151,12 +140,14 @@ export const SignUp = () => {
         </Link>
       </div>
       <div className='mt-3'>
-        <ErrorMessages error={error} />
+        {isError && (
+          <ErrorMessages error={error.data.message || 'Something went wrong'} />
+        )}
         {isSuccess && (
           <Alert
-            variant='danger'
+            variant='success'
             className='text-center'>
-            {data.message}
+            {data.message || 'Sign up Successful'}
           </Alert>
         )}
       </div>
