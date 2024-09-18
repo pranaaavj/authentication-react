@@ -1,12 +1,16 @@
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
+import { setUser } from '../redux/slices/userSlice';
 import ErrorMessages from '../components/ErrorMessages';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
 
 export const SignIn = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -15,10 +19,7 @@ export const SignIn = () => {
     email: '',
     password: '',
   });
-
-  const navigate = useNavigate();
-  const [signIn, { isLoading, isError, isSuccess, error }] =
-    useSignInMutation();
+  const [signIn, { isLoading, isError, error }] = useSignInMutation();
 
   useEffect(() => {
     setValidation({
@@ -51,14 +52,11 @@ export const SignIn = () => {
     }
     // sending form data to create user
     const response = await signIn(formData);
-    console.log(response);
-  };
-
-  useEffect(() => {
-    if (isSuccess) {
+    if (response?.data?.success) {
+      dispatch(setUser(response.data?.data));
       navigate('/');
     }
-  }, [isSuccess, navigate]);
+  };
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData({ ...formData, [name]: value });

@@ -1,9 +1,11 @@
 import storage from 'redux-persist/lib/storage';
 import { authApi } from '../../api/auth';
+import userReducer from '../slices/userSlice';
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
+  user: userReducer,
   [authApi.reducerPath]: authApi.reducer,
 });
 
@@ -15,7 +17,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
+export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -23,4 +25,4 @@ const store = configureStore({
     }).concat(authApi.middleware),
 });
 
-export default persistStore(store);
+export const persistor = persistStore(store);
