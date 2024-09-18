@@ -46,7 +46,7 @@ export const signin = async (req, res) => {
     .json({
       success: true,
       message: 'User logged in',
-      data: { accessToken },
+      data: { user, accessToken },
     });
 };
 /**
@@ -68,6 +68,6 @@ export const refresh = async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Access token created',
-    data: { accessToken, user },
+    data: { user, accessToken },
   });
 };

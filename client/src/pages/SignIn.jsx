@@ -50,7 +50,8 @@ export const SignIn = () => {
       return;
     }
     // sending form data to create user
-    signIn(formData);
+    const response = await signIn(formData);
+    console.log(response);
   };
 
   useEffect(() => {

@@ -1,9 +1,10 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { About, Home, SignIn, SignUp } from './pages';
-import MainLayout from './layouts/MainLayout';
-
-import { Provider } from 'react-redux';
 import store from './redux/store';
+import persistor from './redux/store';
+import MainLayout from './layouts/MainLayout';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { About, Home, SignIn, SignUp } from './pages';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,11 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <PersistGate
+        persistor={persistor}
+        loading={null}>
+        <RouterProvider router={router} />
+      </PersistGate>
     </Provider>
   );
 }
