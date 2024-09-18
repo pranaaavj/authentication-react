@@ -6,6 +6,8 @@ import { persistor, store } from './redux/store';
 import { About, Home, SignIn, SignUp } from './pages';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+console.log('hi');
+
 const router = createBrowserRouter([
   {
     path: '/',
