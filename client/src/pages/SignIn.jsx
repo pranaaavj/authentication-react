@@ -3,11 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import { setUser } from '../redux/slices/userSlice';
 import ErrorMessages from '../components/ErrorMessages';
-<<<<<<< HEAD
-import { useDispatch } from 'react-redux';
-=======
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
->>>>>>> update-signup
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
@@ -15,16 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SubmitButton } from '../components';
 
 export const SignIn = () => {
-<<<<<<< HEAD
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [signIn, { isLoading }] = useSignInMutation();
-=======
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.user);
->>>>>>> update-signup
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -33,11 +22,8 @@ export const SignIn = () => {
     email: '',
     password: '',
   });
-<<<<<<< HEAD
-=======
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
   const provider = new GoogleAuthProvider();
->>>>>>> update-signup
 
   useEffect(() => {
     if (accessToken) {
@@ -72,28 +58,10 @@ export const SignIn = () => {
       return;
     }
     // sending form data to create user
-<<<<<<< HEAD
-    try {
-      const response = await signIn(formData).unwrap();
-
-      if (response?.success) {
-        navigate('/');
-        dispatch(setUser(response.data));
-      } else {
-        setError(
-          response?.error?.message || 'Something went wrong, Please try again'
-        );
-      }
-    } catch (error) {
-      setError(
-        error?.data?.message || 'Something went wrong, Please try again'
-      );
-=======
     const response = await signIn(formData);
     if (response?.data?.success) {
       dispatch(setUser(response?.data?.data));
       navigate('/');
->>>>>>> update-signup
     }
   };
 
