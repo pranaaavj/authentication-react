@@ -5,6 +5,7 @@ const userSlice = createSlice({
   initialState: {
     user: null,
     accessToken: null,
+<<<<<<< HEAD
     isAuthenticated: null,
   },
   reducers: {
@@ -12,11 +13,22 @@ const userSlice = createSlice({
       state.user = action.payload.user;
       state.accessToken = action.payload.accessToken;
       state.isAuthenticated = true;
+=======
+  },
+  reducers: {
+    setUser: (state, action) => {
+      const { user, accessToken } = action.payload;
+      state.user = user;
+      state.accessToken = accessToken;
+>>>>>>> update-signup
     },
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
+<<<<<<< HEAD
       state.isAuthenticated = false;
+=======
+>>>>>>> update-signup
     },
   },
 });

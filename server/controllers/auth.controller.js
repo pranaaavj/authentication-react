@@ -46,7 +46,11 @@ export const signin = async (req, res) => {
     .json({
       success: true,
       message: 'User logged in',
+<<<<<<< HEAD
       data: { accessToken, user },
+=======
+      data: { user, accessToken },
+>>>>>>> update-signup
     });
 };
 /**
@@ -56,7 +60,6 @@ export const signin = async (req, res) => {
  */
 export const refresh = async (req, res) => {
   const refreshToken = req.cookies?.jwt;
-
   if (!refreshToken) throw new NotAuthorizedError('Not Authorized');
   const decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
@@ -68,6 +71,6 @@ export const refresh = async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Access token created',
-    data: { accessToken, user },
+    data: { user, accessToken },
   });
 };

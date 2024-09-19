@@ -1,18 +1,30 @@
+import { auth } from '../../firebase';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import { setUser } from '../redux/slices/userSlice';
 import ErrorMessages from '../components/ErrorMessages';
+<<<<<<< HEAD
 import { useDispatch } from 'react-redux';
+=======
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+>>>>>>> update-signup
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SubmitButton } from '../components';
 
 export const SignIn = () => {
+<<<<<<< HEAD
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [signIn, { isLoading }] = useSignInMutation();
+=======
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.user);
+>>>>>>> update-signup
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -21,9 +33,16 @@ export const SignIn = () => {
     email: '',
     password: '',
   });
+<<<<<<< HEAD
+=======
+  const [signIn, { isLoading, isError, error }] = useSignInMutation();
+  const provider = new GoogleAuthProvider();
+>>>>>>> update-signup
 
   useEffect(() => {
-    setError(null);
+    if (accessToken) {
+      navigate('/');
+    }
     setValidation({
       email: '',
       password: '',
@@ -53,6 +72,7 @@ export const SignIn = () => {
       return;
     }
     // sending form data to create user
+<<<<<<< HEAD
     try {
       const response = await signIn(formData).unwrap();
 
@@ -68,7 +88,29 @@ export const SignIn = () => {
       setError(
         error?.data?.message || 'Something went wrong, Please try again'
       );
+=======
+    const response = await signIn(formData);
+    if (response?.data?.success) {
+      dispatch(setUser(response?.data?.data));
+      navigate('/');
+>>>>>>> update-signup
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, provider).then((result) => {
+      const { email, displayName, uid } = result.user;
+      const payload = {
+        user: {
+          email,
+          username: displayName,
+          id: uid,
+        },
+        accessToken: '',
+      };
+      dispatch(setUser(payload));
+      navigate('/');
+    });
   };
 
   const handleChange = ({ target: { name, value } }) => {
@@ -121,6 +163,13 @@ export const SignIn = () => {
           className='uppercase'
           disabled={isLoading}
         />
+        <SubmitButton
+          variant='danger'
+          text='Sign in with google'
+          className='uppercase mt-3'
+          type='reset'
+          onClick={handleGoogleSignIn}
+        />
       </Form>
       <div className='flex justify-center gap-2 mt-3 font-medium'>
         <p>Don&apos;t have an account ?</p>
@@ -129,7 +178,7 @@ export const SignIn = () => {
         </Link>
       </div>
       <div className='mt-3'>
-        <ErrorMessages error={error} />
+        {isError && <ErrorMessages error={error?.data?.message} />}
       </div>
     </div>
   );
