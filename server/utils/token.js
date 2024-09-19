@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ForbiddenError, NotAuthorizedError } from '../errors/index.js';
+import { ForbiddenError } from '../errors/index.js';
 
 // Creating refresh token
 export const createRefreshToken = (user) => {
@@ -13,7 +13,7 @@ export const createAccessToken = (user) => {
   return jwt.sign(
     { username: user.username, email: user.email },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '30s' }
+    { expiresIn: '10s' }
   );
 };
 

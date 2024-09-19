@@ -1,16 +1,19 @@
+import { auth } from '../../firebase';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import { setUser } from '../redux/slices/userSlice';
 import ErrorMessages from '../components/ErrorMessages';
-import { useDispatch } from 'react-redux';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignInMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SubmitButton } from '../components';
 
 export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,8 +23,12 @@ export const SignIn = () => {
     password: '',
   });
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
+  const provider = new GoogleAuthProvider();
 
   useEffect(() => {
+    if (accessToken) {
+      navigate('/');
+    }
     setValidation({
       email: '',
       password: '',
@@ -53,9 +60,25 @@ export const SignIn = () => {
     // sending form data to create user
     const response = await signIn(formData);
     if (response?.data?.success) {
-      dispatch(setUser(response.data?.data));
+      dispatch(setUser(response?.data?.data));
       navigate('/');
     }
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, provider).then((result) => {
+      const { email, displayName, uid } = result.user;
+      const payload = {
+        user: {
+          email,
+          username: displayName,
+          id: uid,
+        },
+        accessToken: '',
+      };
+      dispatch(setUser(payload));
+      navigate('/');
+    });
   };
 
   const handleChange = ({ target: { name, value } }) => {
@@ -107,6 +130,13 @@ export const SignIn = () => {
           text='Sign in'
           className='uppercase'
           disabled={isLoading}
+        />
+        <SubmitButton
+          variant='danger'
+          text='Sign in with google'
+          className='uppercase mt-3'
+          type='reset'
+          onClick={handleGoogleSignIn}
         />
       </Form>
       <div className='flex justify-center gap-2 mt-3 font-medium'>

@@ -56,7 +56,6 @@ export const signin = async (req, res) => {
  */
 export const refresh = async (req, res) => {
   const refreshToken = req.cookies?.jwt;
-
   if (!refreshToken) throw new NotAuthorizedError('Not Authorized');
   const decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 

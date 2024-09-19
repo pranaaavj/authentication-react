@@ -2,11 +2,12 @@ import Button from 'react-bootstrap/esm/Button';
 import PropTypes from 'prop-types';
 
 export const SubmitButton = ({
-  variant,
-  type,
-  text,
+  variant = 'primary',
+  type = '',
+  text = '',
   disabled = false,
   className = '',
+  onClick = () => {},
 }) => {
   const baseStyle = 'font-medium';
 
@@ -15,6 +16,7 @@ export const SubmitButton = ({
       disabled={disabled}
       variant={variant}
       type={type}
+      onClick={onClick}
       className={`${baseStyle} ${className}`}>
       {text}
     </Button>
@@ -23,8 +25,9 @@ export const SubmitButton = ({
 
 SubmitButton.propTypes = {
   variant: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   text: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   className: PropTypes.string,
+  onClick: PropTypes.func,
 };

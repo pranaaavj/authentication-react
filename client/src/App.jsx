@@ -5,8 +5,7 @@ import AuthenticateRoute from './utils/AuthenticateRoute';
 import { persistor, store } from './redux/store';
 import { About, Home, SignIn, SignUp } from './pages';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
-console.log('hi');
+// import { element } from 'prop-types';
 
 const router = createBrowserRouter([
   {
@@ -14,14 +13,12 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       {
-        index: true,
-        element: (
-          <AuthenticateRoute>
-            <Home />
-          </AuthenticateRoute>
-        ),
+        element: <AuthenticateRoute />,
+        children: [
+          { index: true, element: <Home /> },
+          { path: '/about', element: <About /> },
+        ],
       },
-      { path: '/about', element: <About /> },
       { path: '/sign-in', element: <SignIn /> },
       { path: '/sign-up', element: <SignUp /> },
     ],

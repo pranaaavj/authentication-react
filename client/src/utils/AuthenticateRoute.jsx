@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 const AuthenticateRoute = () => {
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { accessToken } = useSelector((state) => state.user);
 
-  return isAuthenticated ? <Navigate to='/' /> : <Navigate to='/signin' />;
+  return !accessToken ? <Navigate to='/sign-in' /> : <Outlet />;
 };
 
 export default AuthenticateRoute;

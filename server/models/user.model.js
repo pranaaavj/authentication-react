@@ -31,6 +31,11 @@ const UserSchema = new mongoose.Schema(
       required: true,
       maxlength: [20, 'Password cannot exceed 20 characters'],
     },
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
+    },
   },
   { timestamps: true } // Automatic createdAt and createdBy
 );
