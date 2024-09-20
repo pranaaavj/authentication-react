@@ -12,6 +12,7 @@ export const InputField = ({
   text,
   isInvalid = false,
   validationMessage = '',
+  disabled = false,
 }) => {
   return (
     <Form.Group
@@ -25,6 +26,7 @@ export const InputField = ({
         value={value}
         onChange={onChange}
         isInvalid={isInvalid}
+        disabled={disabled}
       />
       {text && <Form.Text>{text}</Form.Text>}
       <Form.Control.Feedback type='invalid'>
@@ -45,4 +47,5 @@ InputField.propTypes = {
   text: PropTypes.string,
   isInvalid: PropTypes.bool,
   validationMessage: PropTypes.string,
+  disabled: PropTypes.bool,
 };

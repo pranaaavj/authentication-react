@@ -4,7 +4,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import ErrorMessages from '../components/ErrorMessages';
 import { validateSignUp } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSignUpMutation } from '../api/auth';
+import { useSignUpMutation } from '../api/authApi';
 import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
 

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SubmitButton } from '../components';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { useSignInMutation, useGoogleSignUpMutation } from '../api/auth';
+import { useSignInMutation, useGoogleSignUpMutation } from '../api/authApi';
 
 export const SignIn = () => {
   const navigate = useNavigate();

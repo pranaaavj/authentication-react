@@ -1,6 +1,6 @@
 import { logout } from '../redux/slices/userSlice';
 import { useEffect } from 'react';
-import { useGetHomeMutation } from '../api/auth';
+import { useGetHomeMutation } from '../api/authApi';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const Home = () => {
