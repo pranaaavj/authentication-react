@@ -2,33 +2,19 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorMessages from '../components/ErrorMessages';
+import { validateSignUp } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignUpMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
 
 export const SignUp = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
-  const [validation, setValidation] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
   const navigate = useNavigate();
+  const emptyForm = { username: '', email: '', password: '' };
+  const [formData, setFormData] = useState(emptyForm);
+  const [validation, setValidation] = useState(emptyForm);
   const [signUp, { isLoading, isSuccess, isError, error, data }] =
     useSignUpMutation();
-
-  useEffect(() => {
-    setValidation({
-      username: '',
-      email: '',
-      password: '',
-    });
-  }, [formData]);
 
   // Redirecting if user authenticated
   useEffect(() => {
@@ -37,33 +23,15 @@ export const SignUp = () => {
         navigate('/sign-in');
       }, 1000);
     }
-  }, [isSuccess, navigate]);
+    setValidation(emptyForm);
+  }, [isSuccess, formData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let newErrors = {
-      username: '',
-      email: '',
-      password: '',
-    };
-    let valid = true;
-    // Checking for empty fields
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email Cannot be empty';
-      valid = false;
-    }
-    if (!formData.password.trim()) {
-      newErrors.password = 'Password Cannot be empty';
-      valid = false;
-    }
-    if (!formData.username.trim()) {
-      newErrors.username = 'Username Cannot be empty';
-      valid = false;
-    }
-    // If any field empty, cancel submission
-    if (!valid) {
-      setValidation(newErrors);
+    const newValidation = validateSignUp(formData);
+    if (Object.keys(newValidation).length) {
+      setValidation(newValidation);
       return;
     }
     // Sending form data to create user

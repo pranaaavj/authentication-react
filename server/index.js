@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import 'express-async-errors';
-import express from 'express';
 import cors from './config/corsConfig.js';
+import express from 'express';
 import connectDB from './config/database.js';
-import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import errorHandler from './middlewares/errorHandler.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 

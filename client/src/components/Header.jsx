@@ -1,8 +1,11 @@
-import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import { useSelector } from 'react-redux';
 
 export const Header = () => {
+  const { user } = useSelector((state) => state.user);
+
   return (
     <Navbar
       expand='lg'
@@ -30,11 +33,21 @@ export const Header = () => {
               className='!px-3'>
               Sign Up
             </Nav.Link>
-            <Nav.Link
-              href='/sign-in'
-              className='!px-3'>
-              Sign In
-            </Nav.Link>
+            {user ? (
+              <Nav.Link href='/profile'>
+                <img
+                  src={user?.profilePhoto}
+                  alt='profile picture'
+                  className='w-10 h-10 rounded-full'
+                />
+              </Nav.Link>
+            ) : (
+              <Nav.Link
+                href='/sign-in'
+                className='!px-3'>
+                Sign In
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

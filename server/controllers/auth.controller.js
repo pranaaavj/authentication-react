@@ -46,11 +46,7 @@ export const signin = async (req, res) => {
     .json({
       success: true,
       message: 'User logged in',
-<<<<<<< HEAD
-      data: { accessToken, user },
-=======
       data: { user, accessToken },
->>>>>>> update-signup
     });
 };
 /**
@@ -60,12 +56,14 @@ export const signin = async (req, res) => {
  */
 export const refresh = async (req, res) => {
   const refreshToken = req.cookies?.jwt;
+  // Verifying the validity of refresh token
   if (!refreshToken) throw new NotAuthorizedError('Not Authorized');
   const decoded = verifyToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
   const user = await User.findOne({ email: decoded.email });
   if (!user) throw new NotAuthorizedError('Not Authorized');
 
+  // Creating new refresh token
   const accessToken = createAccessToken(user);
 
   res.status(200).json({
@@ -73,4 +71,61 @@ export const refresh = async (req, res) => {
     message: 'Access token created',
     data: { user, accessToken },
   });
+};
+/**
+ * @route POST /api/user/google
+ * @desc check if is user exists else create one
+ * @access Public
+ */
+export const googleSignUp = async (req, res) => {
+  const { email, username, photoURL } = req.body;
+
+  // Sending token if user exists
+  const user = await User.findOne({ email });
+  if (user) {
+    const refreshToken = createRefreshToken(user);
+    const accessToken = createAccessToken(user);
+
+    res
+      .status(200)
+      .cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 60 * 60 * 24 * 1000,
+      })
+      .json({
+        success: true,
+        message: 'User logged in',
+        data: { user, accessToken },
+      });
+  } else {
+    // Create new user if user doesn't exist
+    const newPassword = Math.random().toString(36).slice(-8);
+    const newUser = await User.create({
+      username:
+        username.split(' ').join('').toLowerCase() +
+        Math.floor(Math.random() * 10000).toString(),
+      email,
+      profilePhoto: photoURL,
+      password: newPassword,
+    });
+
+    const refreshToken = createRefreshToken(newUser);
+    const accessToken = createAccessToken(newUser);
+
+    res
+      .status(200)
+      .cookie('jwt', refreshToken, {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true,
+        maxAge: 60 * 60 * 24 * 1000,
+      })
+      .json({
+        success: true,
+        message: 'User logged in',
+        data: { user: newUser, accessToken },
+      });
+  }
 };

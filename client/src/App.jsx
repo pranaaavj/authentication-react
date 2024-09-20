@@ -3,9 +3,8 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import AuthenticateRoute from './utils/AuthenticateRoute';
 import { persistor, store } from './redux/store';
-import { About, Home, SignIn, SignUp } from './pages';
+import { Profile, Home, SignIn, SignUp } from './pages';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-// import { element } from 'prop-types';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +15,7 @@ const router = createBrowserRouter([
         element: <AuthenticateRoute />,
         children: [
           { index: true, element: <Home /> },
-          { path: '/about', element: <About /> },
+          { path: '/profile', element: <Profile /> },
         ],
       },
       { path: '/sign-in', element: <SignIn /> },

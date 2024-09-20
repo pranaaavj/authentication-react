@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setUser, logout } from '../redux/slices/userSlice';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_SERVER_URL,
@@ -60,8 +60,19 @@ export const authApi = createApi({
         method: 'GET',
       }),
     }),
+    googleSignUp: builder.mutation({
+      query: (userDetails) => ({
+        url: '/auth/google',
+        method: 'POST',
+        body: userDetails,
+      }),
+    }),
   }),
 });
 
-export const { useSignInMutation, useSignUpMutation, useGetHomeMutation } =
-  authApi;
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useGetHomeMutation,
+  useGoogleSignUpMutation,
+} = authApi;

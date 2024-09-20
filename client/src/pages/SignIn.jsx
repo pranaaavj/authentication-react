@@ -1,63 +1,45 @@
-import { auth } from '../../firebase';
 import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
+import { auth } from '../../config/firebaseConfig';
 import { setUser } from '../redux/slices/userSlice';
 import ErrorMessages from '../components/ErrorMessages';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { validateSignIn } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSignInMutation } from '../api/auth';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SubmitButton } from '../components';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { useSignInMutation, useGoogleSignUpMutation } from '../api/auth';
 
 export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { accessToken } = useSelector((state) => state.user);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [validation, setValidation] = useState({
-    email: '',
-    password: '',
-  });
-  const [signIn, { isLoading, isError, error }] = useSignInMutation();
   const provider = new GoogleAuthProvider();
+  const emptyForm = { email: '', password: '' };
+  const { accessToken } = useSelector((state) => state.user);
+  const [googleSignUp] = useGoogleSignUpMutation();
+  const [formData, setFormData] = useState(emptyForm);
+  const [validation, setValidation] = useState(emptyForm);
+  const [signIn, { isLoading, isError, error }] = useSignInMutation();
 
   useEffect(() => {
     if (accessToken) {
       navigate('/');
     }
-    setValidation({
-      email: '',
-      password: '',
-    });
-  }, [formData]);
+    setValidation(emptyForm);
+  }, [formData, accessToken]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let newValidation = {
-      email: '',
-      password: '',
-    };
-    let valid = true;
-    //checking for empty fields
-    if (!formData.email.trim()) {
-      newValidation.email = 'Email Cannot be empty';
-      valid = false;
-    }
-    if (!formData.password.trim()) {
-      newValidation.password = 'Password Cannot be empty';
-      valid = false;
-    }
-    // if any field empty, cancel submission
-    if (!valid) {
+    // Validate user data
+    const newValidation = validateSignIn(formData);
+    if (Object.keys(newValidation).length) {
       setValidation(newValidation);
       return;
     }
-    // sending form data to create user
+
+    // Sending form data to create user
     const response = await signIn(formData);
     if (response?.data?.success) {
       dispatch(setUser(response?.data?.data));
@@ -65,20 +47,21 @@ export const SignIn = () => {
     }
   };
 
-  const handleGoogleSignIn = () => {
-    signInWithPopup(auth, provider).then((result) => {
-      const { email, displayName, uid } = result.user;
-      const payload = {
-        user: {
-          email,
-          username: displayName,
-          id: uid,
-        },
-        accessToken: '',
-      };
-      dispatch(setUser(payload));
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithPopup(auth, provider);
+
+    const { email, displayName, photoURL } = result.user;
+    const user = {
+      email,
+      username: displayName,
+      photoURL,
+    };
+
+    const response = await googleSignUp(user);
+    if (response?.data?.success) {
+      dispatch(setUser(response?.data?.data));
       navigate('/');
-    });
+    }
   };
 
   const handleChange = ({ target: { name, value } }) => {
