@@ -1,10 +1,14 @@
 import User from '../models/user.model.js';
 import {
+  verifyToken,
   createAccessToken,
   createRefreshToken,
-  verifyToken,
 } from '../utils/token.js';
-import { NotAuthorizedError, NotFoundError } from '../errors/index.js';
+import {
+  ConflictError,
+  NotFoundError,
+  NotAuthorizedError,
+} from '../errors/index.js';
 /**
  * @route POST /api/user/signup
  * @desc User sign up
@@ -12,12 +16,23 @@ import { NotAuthorizedError, NotFoundError } from '../errors/index.js';
  */
 export const signup = async (req, res) => {
   const { username, email, password } = req.body;
-  await User.create({ username, email, password });
+  const file = req.file;
+
+  const userExist = await User.findOne({ email });
+  if (userExist) throw new ConflictError('User already registered');
+
+  await User.create({
+    username,
+    email,
+    password,
+    image: file && file.filename,
+  });
+
   res.status(201).json({
     success: true,
-    message: 'User Created',
+    message: 'User registered',
     data: null,
-  }); //Todo Check for user exists
+  });
 };
 /**
  * @route POST /api/user/signin
@@ -28,7 +43,8 @@ export const signin = async (req, res) => {
   const { email, password } = req.body;
   //check for user
   const user = await User.findOne({ email });
-  if (!user) throw new NotFoundError('User not found');
+  if (!user)
+    throw new NotFoundError("You're not registered, Please register first.");
   // confirm user entered password
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) throw new NotAuthorizedError('Invalid Credentials');
@@ -45,7 +61,7 @@ export const signin = async (req, res) => {
     })
     .json({
       success: true,
-      message: 'User logged in',
+      message: "You'r logged in !",
       data: { user, accessToken },
     });
 };
@@ -96,7 +112,7 @@ export const googleSignUp = async (req, res) => {
       })
       .json({
         success: true,
-        message: 'User logged in',
+        message: "You'r logged in !",
         data: { user, accessToken },
       });
   } else {
@@ -124,7 +140,7 @@ export const googleSignUp = async (req, res) => {
       })
       .json({
         success: true,
-        message: 'User logged in',
+        message: "You'r logged in !",
         data: { user: newUser, accessToken },
       });
   }

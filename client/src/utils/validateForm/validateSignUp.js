@@ -14,6 +14,10 @@ export const validateSignUp = (formData) => {
     validation.username = 'Username Cannot be empty';
   }
 
+  if (formData.image && !formData?.image?.type?.startsWith('image/')) {
+    validation.image = 'Invalid file type, Please choose an image';
+  }
+
   // if any field empty, cancel submission
   return validation;
 };

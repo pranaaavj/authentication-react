@@ -2,16 +2,17 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import ErrorMessages from '../components/ErrorMessages';
-import { validateSignUp } from '../utils';
+import { validateSignUp, createFormData } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignUpMutation } from '../api/authApi';
 import { useEffect, useState } from 'react';
 import { InputField, SubmitButton } from '../components';
 
+const emptyForm = { username: '', email: '', password: '', image: '' };
+
 export const SignUp = () => {
   const navigate = useNavigate();
-  const emptyForm = { username: '', email: '', password: '' };
-  const [formData, setFormData] = useState(emptyForm);
+  const [userInput, setUserInput] = useState(emptyForm);
   const [validation, setValidation] = useState(emptyForm);
   const [signUp, { isLoading, isSuccess, isError, error, data }] =
     useSignUpMutation();
@@ -24,22 +25,25 @@ export const SignUp = () => {
       }, 1000);
     }
     setValidation(emptyForm);
-  }, [isSuccess, formData]);
+  }, [isSuccess, userInput, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newValidation = validateSignUp(formData);
+    const newValidation = validateSignUp(userInput);
     if (Object.keys(newValidation).length) {
       setValidation(newValidation);
       return;
     }
+    const formData = createFormData(userInput);
+
     // Sending form data to create user
     signUp(formData);
   };
 
-  const handleChange = ({ target: { name, value } }) => {
-    setFormData({ ...formData, [name]: value });
+  const handleChange = ({ target: { name, value, files } }) => {
+    if (files) setUserInput({ ...userInput, [name]: files[0] });
+    else setUserInput({ ...userInput, [name]: value });
   };
 
   if (isLoading) {
@@ -65,7 +69,7 @@ export const SignUp = () => {
           type='text'
           name='username'
           placeholder='Enter username'
-          value={formData.username}
+          value={userInput.username}
           onChange={handleChange}
           validationMessage={validation.username}
           isInvalid={!!validation.username}
@@ -76,7 +80,7 @@ export const SignUp = () => {
           type='email'
           name='email'
           placeholder='Enter email address'
-          value={formData.email}
+          value={userInput.email}
           onChange={handleChange}
           text="We'll never share your email with anyone else."
           validationMessage={validation.email}
@@ -88,11 +92,25 @@ export const SignUp = () => {
           type='password'
           name='password'
           placeholder='Enter password'
-          value={formData.password}
+          value={userInput.password}
           onChange={handleChange}
           validationMessage={validation.password}
           isInvalid={!!validation.password}
         />
+        <InputField
+          controlId='image'
+          label='Profile Picture'
+          type='file'
+          name='image'
+          onChange={handleChange}
+          text={
+            userInput.image && `${userInput.image?.name} Uploaded Successfully`
+          }
+          validationMessage={validation.image}
+          isInvalid={!!validation.image}
+          //TODO: Complete validation for image
+        />
+
         <SubmitButton
           variant='secondary'
           type='submit'
@@ -109,13 +127,15 @@ export const SignUp = () => {
       </div>
       <div className='mt-3'>
         {isError && (
-          <ErrorMessages error={error.data.message || 'Something went wrong'} />
+          <ErrorMessages
+            error={error?.data?.message || 'Something went wrong'}
+          />
         )}
         {isSuccess && (
           <Alert
             variant='success'
             className='text-center'>
-            {data.message || 'Sign up Successful'}
+            {data?.message || 'Sign up Successful'}
           </Alert>
         )}
       </div>

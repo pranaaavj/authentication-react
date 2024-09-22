@@ -1,34 +1,41 @@
 import Card from 'react-bootstrap/Card';
-import { useSelector } from 'react-redux';
-import { InputField } from '../components';
-import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import { InputField } from '../components';
+import { useSelector } from 'react-redux';
+import { createFormData } from '../utils';
+import { useSignUpMutation } from '../api/authApi';
+import { useEffect, useRef, useState } from 'react';
+
+const emptyForm = { username: '', email: '', password: '', image: '' };
 
 export const Profile = () => {
   const { user } = useSelector((state) => state.user);
 
-  const emptyForm = { username: '', email: '', password: '' };
-  const [formData, setFormData] = useState(emptyForm);
+  const [userInput, setUserInput] = useState(emptyForm);
+  const fileRef = useRef();
   const [editMode, setEditMode] = useState(false); // Added for toggling edit mode
+  const [signUp] = useSignUpMutation();
 
   useEffect(() => {
-    setFormData({
+    setUserInput({
       username: user.username,
       email: user.email,
+      image: user.image,
     });
   }, [user]);
+  console.log(userInput);
 
-  const handleChange = ({ target: { name, value } }) => {
-    setFormData({ ...formData, [name]: value });
+  const handleChange = ({ target: { name, value, files } }) => {
+    if (files) setUserInput({ ...userInput, [name]: files[0] });
+    else setUserInput({ ...userInput, [name]: value });
   };
 
   const handleSave = () => {
-    console.log('Saving changes...', formData);
+    const formData = createFormData(userInput);
+    signUp(formData);
     setEditMode(false);
   };
-
-  const handleChangePhoto = () => {};
 
   return (
     <div className='flex justify-center items-center h-screen bg-gray-100'>
@@ -36,18 +43,25 @@ export const Profile = () => {
         <div className='flex flex-col items-center'>
           <div className='mb-2 flex flex-col items-center justify-center'>
             <img
-              src={user.profilePhoto}
+              src={`${import.meta.env.VITE_SERVER_URL}/uploads/${user.image}`}
               alt='Profile'
               className='w-24 h-24 rounded-full object-cover border border-gray-300'
             />
             {editMode && (
               <Button
+                onClick={() => fileRef.current.click()}
                 variant='link'
-                className='no-underline'
-                onClick={handleChangePhoto}>
+                className='no-underline'>
                 Change Photo
               </Button>
             )}
+            <input
+              name='image'
+              type='file'
+              ref={fileRef}
+              onChange={handleChange}
+              className='hidden'
+            />
           </div>
 
           <Card.Body className='text-center'>
@@ -60,7 +74,7 @@ export const Profile = () => {
                 label='Username'
                 type='text'
                 name='username'
-                value={formData.username}
+                value={userInput.username}
                 onChange={handleChange}
                 disabled={!editMode} // Disable input if not in edit mode
               />
@@ -70,7 +84,7 @@ export const Profile = () => {
                 label='Email'
                 type='email'
                 name='email'
-                value={formData.email}
+                value={userInput.email}
                 onChange={handleChange}
                 disabled={!editMode} // Disable input if not in edit mode
               />

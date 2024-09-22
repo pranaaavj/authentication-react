@@ -42,7 +42,7 @@ InputField.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   text: PropTypes.string,
   isInvalid: PropTypes.bool,

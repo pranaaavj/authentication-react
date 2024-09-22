@@ -37,7 +37,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
 };
 
 export const authApi = createApi({
-  reducerPath: 'api',
+  reducerPath: 'authApi',
   baseQuery: baseQueryWithReAuth,
   endpoints: (builder) => ({
     signIn: builder.mutation({
@@ -54,7 +54,7 @@ export const authApi = createApi({
         body: userDetails,
       }),
     }),
-    getHome: builder.mutation({
+    getUser: builder.mutation({
       query: () => ({
         url: '/user',
         method: 'GET',
@@ -73,6 +73,6 @@ export const authApi = createApi({
 export const {
   useSignInMutation,
   useSignUpMutation,
-  useGetHomeMutation,
+  useGetUserMutation,
   useGoogleSignUpMutation,
 } = authApi;

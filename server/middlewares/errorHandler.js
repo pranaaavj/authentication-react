@@ -1,5 +1,6 @@
 // Global error handler
 const errorHandler = (err, req, res, next) => {
+  console.log('hi');
   let customError = {
     statusCode: err.statusCode || 500,
     message: err.message || 'Something went wrong',
@@ -7,8 +8,9 @@ const errorHandler = (err, req, res, next) => {
 
   // Handling mongoose duplicate value errors
   if (err.code || err.code === 11000) {
+    console.log(customError);
     customError.message = `This ${Object.keys(
-      err.keyValue
+      err?.keyValue
     )} already exists, Please log in or enter another value`;
     customError.statusCode = 409;
   }

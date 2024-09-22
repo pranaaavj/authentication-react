@@ -11,11 +11,12 @@ import { InputField, SubmitButton } from '../components';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useSignInMutation, useGoogleSignUpMutation } from '../api/authApi';
 
+const emptyForm = { email: '', password: '' };
+
 export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const provider = new GoogleAuthProvider();
-  const emptyForm = { email: '', password: '' };
   const { accessToken } = useSelector((state) => state.user);
   const [googleSignUp] = useGoogleSignUpMutation();
   const [formData, setFormData] = useState(emptyForm);
@@ -27,7 +28,7 @@ export const SignIn = () => {
       navigate('/');
     }
     setValidation(emptyForm);
-  }, [formData, accessToken]);
+  }, [formData, accessToken, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
