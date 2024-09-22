@@ -18,7 +18,7 @@ export const Profile = () => {
       email: user.email,
     });
   }, [user]);
-
+  console.log(user);
   const handleChange = ({ target: { name, value } }) => {
     setFormData({ ...formData, [name]: value });
   };
