@@ -1,12 +1,11 @@
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
-import ErrorMessages from '../components/ErrorMessages';
-import { validateSignUp, createFormData } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignUpMutation } from '../api/authApi';
 import { useEffect, useState } from 'react';
-import { InputField, SubmitButton } from '../components';
+import { InputField, SubmitButton, ErrorMessages } from '../components';
+import { validateSignUp, createFormData } from '../utils';
 
 const emptyForm = { username: '', email: '', password: '', image: '' };
 
@@ -108,7 +107,6 @@ export const SignUp = () => {
           }
           validationMessage={validation.image}
           isInvalid={!!validation.image}
-          //TODO: Complete validation for image
         />
 
         <SubmitButton

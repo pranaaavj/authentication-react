@@ -1,7 +1,7 @@
 import Alert from 'react-bootstrap/Alert';
 import PropTypes from 'prop-types';
 
-const ErrorMessages = ({ error }) => {
+export const ErrorMessages = ({ error }) => {
   if (!error) return null;
 
   return Array.isArray(error) ? (
@@ -24,5 +24,3 @@ const ErrorMessages = ({ error }) => {
 ErrorMessages.propTypes = {
   error: PropTypes.any,
 };
-
-export default ErrorMessages;

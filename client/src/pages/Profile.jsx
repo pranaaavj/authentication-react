@@ -1,22 +1,28 @@
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import { setUser } from '../redux/slices/userSlice';
 import { InputField } from '../components';
-import { useSelector } from 'react-redux';
 import { createFormData } from '../utils';
-import { useSignUpMutation } from '../api/authApi';
+import { useUpdateUserMutation } from '../api/userApi';
+import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 
-const emptyForm = { username: '', email: '', password: '', image: '' };
+const emptyForm = {
+  username: '',
+  email: '',
+  password: '',
+  image: '',
+};
 
 export const Profile = () => {
-  const { user } = useSelector((state) => state.user);
-
-  const [userInput, setUserInput] = useState(emptyForm);
   const fileRef = useRef();
-  const [editMode, setEditMode] = useState(false); // Added for toggling edit mode
-  const [signUp] = useSignUpMutation();
-
+  const dispatch = useDispatch();
+  const [editMode, setEditMode] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const [userInput, setUserInput] = useState(emptyForm);
+  const [updateUser] = useUpdateUserMutation();
+  console.log(user);
   useEffect(() => {
     setUserInput({
       username: user.username,
@@ -24,16 +30,20 @@ export const Profile = () => {
       image: user.image,
     });
   }, [user]);
-  console.log(userInput);
 
   const handleChange = ({ target: { name, value, files } }) => {
     if (files) setUserInput({ ...userInput, [name]: files[0] });
     else setUserInput({ ...userInput, [name]: value });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const formData = createFormData(userInput);
-    signUp(formData);
+    const updatedUser = { formData, userId: user?.id };
+    const response = await updateUser(updatedUser);
+
+    if (response?.data?.success) {
+      dispatch(setUser(response?.data?.data));
+    }
     setEditMode(false);
   };
 
@@ -106,7 +116,6 @@ export const Profile = () => {
               </Button>
             )}
           </div>
-
           <Card.Footer className='w-full text-center mt-6'>
             <Link
               to='/'

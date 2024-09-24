@@ -2,16 +2,15 @@ import 'dotenv/config';
 import 'express-async-errors';
 import path from 'path';
 import cors from './config/corsConfig.js';
+import router from './routes/index.js';
 import express from 'express';
 import connectDB from './config/database.js';
-import userRoutes from './routes/user.route.js';
-import authRoutes from './routes/auth.route.js';
 import errorHandler from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
 
-// Middlewares`
+// Middlewares
 app.use(express.json());
 app.use(cors);
 app.use(cookieParser());
@@ -21,14 +20,7 @@ app.use(
 );
 
 // Routes
-app.use('/api/user', userRoutes);
-app.use('/api/auth', authRoutes);
-
-//testing purpose
-app.post('/test', (req, res) => {
-  console.log(req.body);
-  res.send();
-});
+app.use('/api', router);
 
 // Global error handler
 app.use(errorHandler);

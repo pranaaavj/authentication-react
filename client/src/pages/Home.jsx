@@ -1,22 +1,23 @@
 import { logout } from '../redux/slices/userSlice';
-import { useEffect } from 'react';
-import { useGetUserMutation } from '../api/authApi';
+import { useGetUserQuery } from '../api/userApi';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 export const Home = () => {
-  const [getUser, { data, isSuccess }] = useGetUserMutation();
   const { user } = useSelector((state) => state.user);
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
+  const { data } = useGetUserQuery(user.id);
 
-  console.log(user.image);
-  if (isSuccess) console.log(data);
+  useEffect(() => {});
 
   const dispatch = useDispatch();
   function handleClick() {
     dispatch(logout());
   }
+
+  async function handleGetUser() {
+    console.log(data);
+  }
+
   return (
     <div>
       <img
@@ -25,6 +26,11 @@ export const Home = () => {
         className='w-10 h-auto'
       />
       Welcome home {user.name} <button onClick={handleClick}>Log out</button>
+      <button
+        onClick={handleGetUser}
+        className=''>
+        Get user
+      </button>
     </div>
   );
 };

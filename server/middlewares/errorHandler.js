@@ -1,6 +1,5 @@
 // Global error handler
 const errorHandler = (err, req, res, next) => {
-  console.log('hi');
   let customError = {
     statusCode: err.statusCode || 500,
     message: err.message || 'Something went wrong',

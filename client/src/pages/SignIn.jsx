@@ -2,13 +2,12 @@ import Form from 'react-bootstrap/Form';
 import Spinner from 'react-bootstrap/Spinner';
 import { auth } from '../../config/firebaseConfig';
 import { setUser } from '../redux/slices/userSlice';
-import ErrorMessages from '../components/ErrorMessages';
 import { validateSignIn } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { InputField, SubmitButton } from '../components';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { InputField, SubmitButton, ErrorMessages } from '../components';
 import { useSignInMutation, useGoogleSignUpMutation } from '../api/authApi';
 
 const emptyForm = { email: '', password: '' };
@@ -27,7 +26,7 @@ export const SignIn = () => {
     if (accessToken) {
       navigate('/');
     }
-    setValidation(emptyForm);
+    // setValidation(emptyForm);
   }, [formData, accessToken, navigate]);
 
   const handleSubmit = async (e) => {
