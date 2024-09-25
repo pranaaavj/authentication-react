@@ -26,7 +26,7 @@ export const SignIn = () => {
     if (accessToken) {
       navigate('/');
     }
-    // setValidation(emptyForm);
+    setValidation(emptyForm);
   }, [formData, accessToken, navigate]);
 
   const handleSubmit = async (e) => {
@@ -117,6 +117,13 @@ export const SignIn = () => {
         <SubmitButton
           variant='danger'
           text='Sign in with google'
+          className='uppercase mt-3'
+          type='reset'
+          onClick={handleGoogleSignIn}
+        />
+        <SubmitButton
+          variant='primary'
+          text='Sign in with phone number'
           className='uppercase mt-3'
           type='reset'
           onClick={handleGoogleSignIn}

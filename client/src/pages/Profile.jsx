@@ -22,7 +22,7 @@ export const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const [userInput, setUserInput] = useState(emptyForm);
   const [updateUser] = useUpdateUserMutation();
-  console.log(user);
+
   useEffect(() => {
     setUserInput({
       username: user.username,

@@ -1,13 +1,14 @@
 import storage from 'redux-persist/lib/storage';
 import userReducer from '../slices/userSlice';
-import { authApi, userApi } from '../../api';
+import { authApi, userApi, adminApi } from '../../api';
 import { persistReducer, persistStore } from 'redux-persist';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 const rootReducer = combineReducers({
   user: userReducer,
-  [userApi.reducerPath]: userApi.reducer,
   [authApi.reducerPath]: authApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
+  [adminApi.reducerPath]: adminApi.reducer,
 });
 
 const persistConfig = {
@@ -25,7 +26,8 @@ export const store = configureStore({
       serializableCheck: false,
     })
       .concat(authApi.middleware)
-      .concat(userApi.middleware),
+      .concat(userApi.middleware)
+      .concat(adminApi.middleware),
 });
 
 export const persistor = persistStore(store);

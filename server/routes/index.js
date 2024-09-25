@@ -7,7 +7,7 @@ import { authenticateToken } from '../middlewares/authenticateToken.js';
 const router = express.Router();
 
 router.use('/auth', authRouter);
-router.use('/user', authenticateToken, userRouter);
-router.use('/admin', authenticateToken, adminRouter);
+router.use('/user', authenticateToken(['user', 'admin']), userRouter);
+router.use('/admin', authenticateToken(['admin']), adminRouter);
 
 export default router;

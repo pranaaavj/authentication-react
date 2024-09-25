@@ -8,9 +8,10 @@ const userSlice = createSlice({
   },
   reducers: {
     setUser: (state, action) => {
-      state.user = action.payload?.user;
-      if (action.payload?.accessToken) {
-        state.accessToken = action.payload?.accessToken;
+      const { user = '', accessToken = '' } = action.payload;
+      state.user = user;
+      if (accessToken) {
+        state.accessToken = accessToken;
       }
     },
     logout: (state) => {

@@ -11,7 +11,7 @@ export const createRefreshToken = (user) => {
 // Creating access token
 export const createAccessToken = (user) => {
   return jwt.sign(
-    { username: user.username, email: user.email },
+    { username: user.username, email: user.email, role: user.role },
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: '20m' }
   );

@@ -10,7 +10,7 @@ import {
   NotAuthorizedError,
 } from '../errors/index.js';
 /**
- * @route POST /api/user/signup
+ * @route POST /api/auth/signup
  * @desc User sign up
  * @access Public
  */
@@ -35,7 +35,7 @@ export const signup = async (req, res) => {
   });
 };
 /**
- * @route POST /api/user/signin
+ * @route POST /api/auth/signin
  * @desc User sign in
  * @access Public
  */
@@ -66,7 +66,7 @@ export const signin = async (req, res) => {
     });
 };
 /**
- * @route POST /api/user/refresh
+ * @route POST /api/auth/refresh
  * @desc create new access token
  * @access Public
  */
@@ -89,7 +89,7 @@ export const refresh = async (req, res) => {
   });
 };
 /**
- * @route POST /api/user/google
+ * @route POST /api/auth/google
  * @desc check if is user exists else create one
  * @access Public
  */

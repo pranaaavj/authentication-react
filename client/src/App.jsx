@@ -2,9 +2,9 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from './redux/store';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { userRoutes, adminRoutes } from './routers';
+import { routes } from './routers';
 
-const router = createBrowserRouter([...userRoutes, ...adminRoutes]);
+const router = createBrowserRouter(routes);
 
 export default function App() {
   return (
