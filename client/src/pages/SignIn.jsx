@@ -18,6 +18,7 @@ export const SignIn = () => {
   const provider = new GoogleAuthProvider();
   const { accessToken } = useSelector((state) => state.user);
   const [googleSignUp] = useGoogleSignUpMutation();
+
   const [formData, setFormData] = useState(emptyForm);
   const [validation, setValidation] = useState(emptyForm);
   const [signIn, { isLoading, isError, error }] = useSignInMutation();
@@ -126,7 +127,7 @@ export const SignIn = () => {
           text='Sign in with phone number'
           className='uppercase mt-3'
           type='reset'
-          onClick={handleGoogleSignIn}
+          onClick={() => navigate('/login-otp')}
         />
       </Form>
       <div className='flex justify-center gap-2 mt-3 font-medium'>

@@ -9,6 +9,7 @@ import {
   EditUser,
 } from '../pages';
 import { AuthenticateAdmins } from '../utils/AuthenticateAdmins';
+import { LoginOtp } from '../pages/LoginOtp';
 
 export const routes = [
   {
@@ -39,6 +40,7 @@ export const routes = [
 
       { path: '/sign-in', element: <SignIn /> },
       { path: '/sign-up', element: <SignUp /> },
+      { path: '/login-otp', element: <LoginOtp /> },
     ],
   },
 ];
