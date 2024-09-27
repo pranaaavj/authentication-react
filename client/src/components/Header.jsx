@@ -2,6 +2,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import { useSelector } from 'react-redux';
+import { Button } from 'flowbite-react';
 
 export const Header = () => {
   const { user } = useSelector((state) => state.user);
@@ -15,8 +16,8 @@ export const Header = () => {
         className='!px-4'>
         <Navbar.Brand
           href='/'
-          className='!mr-auto'>
-          Authorization
+          className='!mr-auto font-bold'>
+          Pen & Post
         </Navbar.Brand>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse
@@ -56,6 +57,7 @@ export const Header = () => {
           </Nav>
         </Navbar.Collapse>
       </Container>
+      <Button>Click me</Button>
     </Navbar>
   );
 };

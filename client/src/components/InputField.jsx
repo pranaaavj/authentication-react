@@ -13,10 +13,11 @@ export const InputField = ({
   isInvalid = false,
   validationMessage = '',
   disabled = false,
+  className = '',
 }) => {
   return (
     <Form.Group
-      className='mb-3'
+      className={`mb-3 ${className}`}
       controlId={controlId}>
       <Form.Label>{label}</Form.Label>
       <Form.Control
@@ -48,4 +49,5 @@ InputField.propTypes = {
   isInvalid: PropTypes.bool,
   validationMessage: PropTypes.string,
   disabled: PropTypes.bool,
+  className: PropTypes.string,
 };

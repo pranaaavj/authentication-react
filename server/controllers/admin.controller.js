@@ -25,7 +25,6 @@ export const updateUser = async (req, res) => {
   const { email, username } = req.body;
   const { id } = req.params;
   // Updating the user
-  console.log(email, username);
   const updatedUser = await User.findOneAndUpdate(
     { _id: id },
     {
@@ -34,7 +33,6 @@ export const updateUser = async (req, res) => {
     },
     { new: true }
   );
-  console.log(email, username, id);
   res.status(200).json({
     success: true,
     message: 'User updated successfully',

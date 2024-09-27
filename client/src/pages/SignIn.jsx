@@ -121,13 +121,6 @@ export const SignIn = () => {
           type='reset'
           onClick={handleGoogleSignIn}
         />
-        <SubmitButton
-          variant='primary'
-          text='Sign in with phone number'
-          className='uppercase mt-3'
-          type='reset'
-          onClick={handleGoogleSignIn}
-        />
       </Form>
       <div className='flex justify-center gap-2 mt-3 font-medium'>
         <p>Don&apos;t have an account ?</p>
