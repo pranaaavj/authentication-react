@@ -56,7 +56,7 @@ export const SignIn = () => {
       username: displayName,
       photoURL,
     };
-
+    console.log(result.user);
     const response = await googleSignUp(user);
     if (response?.data?.success) {
       dispatch(setUser(response?.data?.data));
@@ -68,19 +68,8 @@ export const SignIn = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  if (isLoading) {
-    return (
-      <div className='flex justify-center items-center h-screen'>
-        <Spinner
-          animation='border'
-          role='status'
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className='max-w-md mx-auto mt-10 p-6 bg-white border border-gray-200 rounded-lg shadow-md'>
+    <div className='max-w-md mx-auto mt-10 p-6 bg-white border border-gray-200 rounded-lg shadow-md '>
       <h1 className='text-4xl font-semibold text-center mt-2'>SIGN IN</h1>
       <Form
         className='w-96 flex flex-col mx-auto align-middle mt-8'
@@ -110,13 +99,13 @@ export const SignIn = () => {
         <SubmitButton
           variant='secondary'
           type='submit'
-          text='Sign in'
+          text={isLoading ? 'Loading...' : 'Sign In'}
           className='uppercase'
           disabled={isLoading}
         />
         <SubmitButton
           variant='danger'
-          text='Sign in with google'
+          text={isLoading ? 'Loading...' : 'Sign In With Google'}
           className='uppercase mt-3'
           type='reset'
           onClick={handleGoogleSignIn}

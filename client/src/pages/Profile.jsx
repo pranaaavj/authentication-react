@@ -53,7 +53,11 @@ export const Profile = () => {
         <div className='flex flex-col items-center'>
           <div className='mb-2 flex flex-col items-center justify-center'>
             <img
-              src={`${import.meta.env.VITE_SERVER_URL}/uploads/${user.image}`}
+              src={
+                user?.image.startsWith('https://')
+                  ? user.image
+                  : `${import.meta.env.VITE_SERVER_URL}/uploads/${user.image}`
+              }
               alt='Profile'
               className='w-24 h-24 rounded-full object-cover border border-gray-300'
             />
@@ -116,7 +120,7 @@ export const Profile = () => {
               </Button>
             )}
           </div>
-          <Card.Footer className='w-full text-center mt-6'>
+          <Card.Footer className='w-full text-center mt-6 bg-transparent'>
             <Link
               to='/'
               className='no-underline'>

@@ -123,7 +123,7 @@ export const googleSignUp = async (req, res) => {
         username.split(' ').join('').toLowerCase() +
         Math.floor(Math.random() * 10000).toString(),
       email,
-      profilePhoto: photoURL,
+      image: photoURL,
       password: newPassword,
     });
 

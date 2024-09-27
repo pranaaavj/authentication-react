@@ -1,8 +1,8 @@
 import { logout } from '../redux/slices/userSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
 import { FaMoon, FaUserCircle } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Navbar, Dropdown, TextInput } from 'flowbite-react';
 
 export const NavBar = () => {
@@ -11,7 +11,7 @@ export const NavBar = () => {
   const { user } = useSelector((state) => state.user);
 
   return (
-    <div className='flex flex-col justify-between mx-2 sticky top-0'>
+    <div className='flex flex-col justify-between mx-2 sticky top-0 z-10'>
       <Navbar
         fluid={true}
         rounded={true}
@@ -64,12 +64,10 @@ export const NavBar = () => {
               <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
             </Link>
           ) : (
-            <Button gradientDuoTone='purpleToBlue'>
-              <span
-                onClick={() => dispatch(logout())}
-                className='font-bold '>
-                Logout
-              </span>
+            <Button
+              gradientDuoTone='purpleToBlue'
+              onClick={() => dispatch(logout())}>
+              <span className='font-bold '>Logout</span>
             </Button>
           )}
 
@@ -78,25 +76,50 @@ export const NavBar = () => {
               arrowIcon={false}
               inline={true}
               label={
-                <FaUserCircle className='text-2xl  text-gray-600 dark:text-gray-300' />
-              }
-              className='ml-auto '>
-              <Dropdown.Header className='no-underline'>
-                <span className='block text-sm'>{user.username}</span>
+                user && user?.image ? (
+                  <img
+                    src={
+                      user.image.startsWith('https://')
+                        ? user.image
+                        : `${import.meta.env.VITE_SERVER_URL}/uploads/${
+                            user.image
+                          }`
+                    }
+                    alt='Profile'
+                    className='w-10 h-10 rounded-full object-cover object-c/enter border-gray-300'
+                  />
+                ) : (
+                  <FaUserCircle className='text-2xl  text-gray-600 dark:text-gray-300' />
+                )
+              }>
+              <Dropdown.Header className='no-underline p-0'>
+                <span className='block text-sm'>
+                  {' '}
+                  Username: {user?.username}
+                </span>
                 <span className='block text-sm font-medium truncate'>
-                  {user.email}
+                  Email: {user?.email}
                 </span>
               </Dropdown.Header>
-              {user.role == 'admin' && (
-                <Dropdown.Item>
-                  <Link to='/admin-dashboard'>Dashboard</Link>
-                </Dropdown.Item>
+              {user?.role == 'admin' && (
+                <>
+                  <Dropdown.Item className='p-0 m-0'>
+                    <Link
+                      to='/admin-dashboard'
+                      className='no-underline'>
+                      Dashboard
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Divider className='p-0' />
+                </>
               )}
-              <Dropdown.Item>
-                <Link to='/profile'>Profile</Link>
+              <Dropdown.Item className='p-0'>
+                <Link
+                  to='/profile'
+                  className='no-underline'>
+                  Profile
+                </Link>
               </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item></Dropdown.Item>
             </Dropdown>
           )}
         </div>

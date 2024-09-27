@@ -12,7 +12,7 @@ const router = express.Router();
 router
   .post('/signup', upload.single('image'), signup)
   .post('/signin', signin)
-  .post('/google', googleSignUp)
+  .post('/google', upload.single('image'), googleSignUp)
   .get('/refresh', refresh);
 
 export default router;
