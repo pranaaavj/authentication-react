@@ -15,12 +15,12 @@ const style = {
   p: 4,
 };
 
-export const CustomModal = ({ modalDetails }) => {
+export const CustomModal = ({ modal, closeModal }) => {
   return (
     <div>
       <Modal
-        open={modalDetails.open}
-        onClose={modalDetails.handleClose}
+        open={modal.open}
+        onClose={closeModal}
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'>
         <Box sx={style}>
@@ -28,12 +28,12 @@ export const CustomModal = ({ modalDetails }) => {
             id='modal-modal-title'
             variant='h6'
             component='h2'>
-            {modalDetails.title}
+            {modal.title}
           </Typography>
           <Typography
             id='modal-modal-description'
             sx={{ mt: 2 }}>
-            {modalDetails.body}
+            {modal.body}
           </Typography>
         </Box>
       </Modal>
@@ -42,5 +42,6 @@ export const CustomModal = ({ modalDetails }) => {
 };
 
 CustomModal.propTypes = {
-  modalDetails: PropTypes.object.isRequired,
+  modal: PropTypes.object.isRequired,
+  closeModal: PropTypes.func.isRequired,
 };

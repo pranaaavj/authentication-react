@@ -1,5 +1,4 @@
 import Form from 'react-bootstrap/Form';
-import Spinner from 'react-bootstrap/Spinner';
 import { auth } from '../../config/firebaseConfig';
 import { setUser } from '../redux/slices/userSlice';
 import { validateSignIn } from '../utils';

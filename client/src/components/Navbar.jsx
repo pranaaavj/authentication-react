@@ -1,22 +1,22 @@
 import { logout } from '../redux/slices/userSlice';
+import { toggleTheme } from '../redux/slices/themeSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
-import { FaMoon, FaUserCircle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import { FaMoon, FaUserCircle, FaSun } from 'react-icons/fa';
 import { Button, Navbar, Dropdown, TextInput } from 'flowbite-react';
 
 export const NavBar = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { user } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme);
 
   return (
-    <div className='flex flex-col justify-between mx-2 sticky top-0 z-10'>
+    <div className='flex flex-col justify-between sticky top-0 z-10'>
       <Navbar
         fluid={true}
-        rounded={true}
         className='flex-nowrap'>
-        {/* Logo */}
         <div className='flex items-center gap-4'>
           <Link
             to='/'
@@ -25,7 +25,6 @@ export const NavBar = () => {
               Pen & Post
             </span>
           </Link>
-
           <form className='hidden md:flex md:w-4/6 items-center mx-4'>
             <TextInput
               type='text'
@@ -34,7 +33,6 @@ export const NavBar = () => {
               className='w-full'
             />
           </form>
-
           <Button
             className='md:hidden w-12 h-10 items-center focus:outline-none focus:ring-0'
             pill
@@ -45,10 +43,11 @@ export const NavBar = () => {
 
         <div className='flex gap-4'>
           <Button
-            className='w-10 h-10 items-center focus:ring-0 hidden sm:inline'
+            className='w-10 h-10 items-center focus:ring-0'
             color='gray'
-            pill>
-            <FaMoon />
+            pill
+            onClick={() => dispatch(toggleTheme())}>
+            {theme === 'light' ? <FaSun /> : <FaMoon />}
           </Button>
 
           {location.pathname === '/sign-in' ? (

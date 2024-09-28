@@ -2,10 +2,10 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import { setUser } from '../redux/slices/userSlice';
-import { InputField } from '../components';
 import { createFormData } from '../utils';
 import { useUpdateUserMutation } from '../api/userApi';
 import { useSelector, useDispatch } from 'react-redux';
+import { ErrorMessages, InputField } from '../components';
 import { useEffect, useRef, useState } from 'react';
 
 const emptyForm = {
@@ -21,7 +21,7 @@ export const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const { user } = useSelector((state) => state.user);
   const [userInput, setUserInput] = useState(emptyForm);
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser, { isError, error }] = useUpdateUserMutation();
 
   useEffect(() => {
     setUserInput({
@@ -118,6 +118,13 @@ export const Profile = () => {
                 onClick={() => setEditMode(!editMode)}>
                 Edit Profile
               </Button>
+            )}
+          </div>
+          <div className='mt-4'>
+            {isError && (
+              <ErrorMessages
+                error={error?.data?.message || 'Something went wrong'}
+              />
             )}
           </div>
           <Card.Footer className='w-full text-center mt-6 bg-transparent'>

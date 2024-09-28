@@ -23,6 +23,8 @@ export const getAllUsers = async (req, res) => {
  */
 export const updateUser = async (req, res) => {
   const { email, username } = req.body;
+  const file = req.file;
+  console.log(file);
   const { id } = req.params;
   // Updating the user
   const updatedUser = await User.findOneAndUpdate(
@@ -30,6 +32,7 @@ export const updateUser = async (req, res) => {
     {
       email,
       username,
+      image: file && file.filename,
     },
     { new: true }
   );

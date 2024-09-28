@@ -26,6 +26,7 @@ export const updateUser = async (req, res) => {
   const userId = req.params.id;
   const { email, username } = req.body;
   const file = req.file;
+  console.log(file);
   // Finding and updating the user
   const updatedUser = await User.findOneAndUpdate(
     { _id: userId },

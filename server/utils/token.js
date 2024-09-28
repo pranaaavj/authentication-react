@@ -13,7 +13,7 @@ export const createAccessToken = (user) => {
   return jwt.sign(
     { username: user.username, email: user.email, role: user.role },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '20m' }
+    { expiresIn: '5s' }
   );
 };
 

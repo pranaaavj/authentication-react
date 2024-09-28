@@ -4,3 +4,4 @@ export { SignIn } from './SignIn';
 export { Profile } from './Profile';
 export { EditUser } from './EditUser';
 export { AdminDashboard } from './AdminDashboard';
+export { AddUser } from './AddUser';
