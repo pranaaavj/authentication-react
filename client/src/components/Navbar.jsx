@@ -93,7 +93,7 @@ export const NavBar = () => {
                 )
               }
               className='z-50 pr-7 pt-1'>
-              <div className='px-4 py-3 text-sm text-gray-900 dark:text-white'>
+              <div className='text-sm text-gray-900 dark:text-white text-center'>
                 <div className='font-medium truncate mb-1'>
                   {user?.username}
                 </div>
@@ -102,31 +102,12 @@ export const NavBar = () => {
                 </div>
               </div>
               <Dropdown.Divider />
-              {user?.role === 'admin' && (
-                <>
-                  <Dropdown.Item
-                    as={Link}
-                    to='/admin-dashboard?tab=profile'
-                    className='flex items-center'>
-                    <FaCog className='mr-2' />
-                    Dashboard
-                  </Dropdown.Item>
-                  <Dropdown.Divider />
-                </>
-              )}
               <Dropdown.Item
                 as={Link}
-                to='/profile'
+                to='/dashboard?tab=profile'
                 className='flex items-center'>
-                <FaUser className='mr-2' />
-                Profile
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item
-                onClick={() => dispatch(logout())}
-                className='flex items-center text-red-600 hover:bg-red-100 dark:hover:bg-red-600 dark:hover:text-white'>
-                <FaSignOutAlt className='mr-2' />
-                Sign out
+                <FaCog className='mr-2' />
+                Dashboard
               </Dropdown.Item>
             </Dropdown>
           )}

@@ -124,7 +124,7 @@ export const Profile = () => {
                 Edit Profile
               </Button>
             )}
-            <Link to='/create-post'>
+            <Link to='/blog/create-post'>
               <Button className='mx-2'>Create post</Button>
             </Link>
           </div>

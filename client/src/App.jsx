@@ -31,7 +31,8 @@ export default function App() {
         loading={null}>
         <ThemeProvider>
           <MUIProvider theme={theme}>
-            <ChakraProvider>
+            <ChakraProvider
+              toastOptions={{ defaultOptions: { position: 'top-right' } }}>
               <RouterProvider router={router} />
             </ChakraProvider>
           </MUIProvider>

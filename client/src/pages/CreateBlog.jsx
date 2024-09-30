@@ -1,30 +1,57 @@
-import { Button, Input } from '@chakra-ui/react';
-import { Select } from '@chakra-ui/react';
-import { useRef } from 'react';
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+import { Box, Image } from '@chakra-ui/react';
+import { Select } from '@chakra-ui/react';
+import { validateBlog } from '../utils';
+import { useCustomToast } from '../hooks';
+import { Button, Input } from '@chakra-ui/react';
+import { ErrorMessages } from '../components';
+import { createFormData } from '../utils/createFormData';
+import { useCreateBlogMutation } from '../api/blogApi';
+import { useEffect, useRef, useState } from 'react';
 
-export const CreatePost = () => {
-  const [blogInput, setBlogInput] = useState({
-    title: '',
-    category: '',
-    image: '',
-    body: '',
-  });
+const emptyBlog = {
+  title: '',
+  category: '',
+  image: '',
+  body: '',
+};
+
+export const CreateBlog = () => {
   const fileRef = useRef(null);
+  const toast = useCustomToast();
+  const [blogInput, setBlogInput] = useState(emptyBlog);
+  const [imagePreview, setImagePreview] = useState('');
+  const [validation, setValidation] = useState(emptyBlog);
+  const [createBlog, { isError, isSuccess, error }] = useCreateBlogMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast('Blog posted successfully', 'green');
+    }
+    setValidation(emptyBlog);
+  }, [isSuccess, blogInput]);
 
   const handleBlogInput = ({ target: { name, value, files } }) => {
-    if (files)
+    if (files) {
       setBlogInput((prevInput) => ({ ...prevInput, [name]: files[0] }));
-    else setBlogInput((prevInput) => ({ ...prevInput, [name]: value }));
+      setImagePreview(URL.createObjectURL(files[0]));
+    } else setBlogInput((prevInput) => ({ ...prevInput, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(blogInput);
-  };
 
+    const newValidation = validateBlog(blogInput);
+    if (Object.keys(newValidation).length) {
+      setValidation(newValidation);
+      return;
+    }
+
+    const blogData = createFormData(blogInput);
+    await createBlog(blogData);
+  };
+  console.log(validation);
   return (
     <div className='min-h-screen max-w-3xl mx-auto px-4'>
       <h1 className='text-center text-3xl my-7 font-semibold dark:text-white'>
@@ -71,6 +98,16 @@ export const CreatePost = () => {
             Choose an image
           </Button>
         </div>
+        <div className='flex justify-center'>
+          {imagePreview && (
+            <Image
+              src={imagePreview}
+              objectFit={'cover'}
+              boxSize={'300px'}
+              alt='image preview'
+            />
+          )}
+        </div>
         <ReactQuill
           theme='snow'
           placeholder='Write Something..'
@@ -84,9 +121,19 @@ export const CreatePost = () => {
           display='flex'
           margin='auto'
           onClick={handleSubmit}>
-          Submit Blog
+          Post Blog
         </Button>
       </form>
+      <div className='text-center mt-3'>
+        {isError && <ErrorMessages error={error?.data?.message} />}
+        {Object.keys(validation).length > 0 &&
+          Object.keys(validation).map((key) => (
+            <ErrorMessages
+              key={key}
+              error={validation[key]}
+            />
+          ))}
+      </div>
     </div>
   );
 };

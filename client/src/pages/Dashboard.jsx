@@ -4,7 +4,7 @@ import { DashUsers } from './DashUsers';
 import { useEffect, useState } from 'react';
 import { Profile } from './Profile';
 
-export const AdminDashboard = () => {
+export const DashBoard = () => {
   const location = useLocation();
   const [tab, setTab] = useState('');
 

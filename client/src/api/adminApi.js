@@ -17,14 +17,11 @@ export const adminApi = createApi({
           : ['Users'],
     }),
     updateUser: builder.mutation({
-      query: (userDetails) => {
-        console.log(userDetails.formData);
-        return {
-          url: `/admin/users/${userDetails?.id}`,
-          method: 'PATCH',
-          body: userDetails?.formData,
-        };
-      },
+      query: (userDetails) => ({
+        url: `/admin/users/${userDetails?.id}`,
+        method: 'PATCH',
+        body: userDetails?.formData,
+      }),
       invalidatesTags: ['Users'],
     }),
     deleteUser: builder.mutation({

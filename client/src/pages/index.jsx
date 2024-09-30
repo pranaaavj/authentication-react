@@ -6,6 +6,6 @@ export { Profile } from './Profile';
 export { NotFound } from './NotFound';
 export { EditUser } from './EditUser';
 export { DashUsers } from './DashUsers';
-export { CreatePost } from './CreatePost';
+export { CreateBlog } from './CreateBlog';
 export { DashSidebar } from './DashSidebar';
-export { AdminDashboard } from './AdminDashboard';
+export { DashBoard } from './Dashboard';

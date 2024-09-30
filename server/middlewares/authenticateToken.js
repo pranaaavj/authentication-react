@@ -14,8 +14,7 @@ export const authenticateToken =
     if (!decoded) throw new NotAuthorizedError('Unauthorized');
 
     req.user = {
-      username: decoded.username,
-      email: decoded.email,
+      userId: decoded.userId,
       role: decoded.role,
     };
 

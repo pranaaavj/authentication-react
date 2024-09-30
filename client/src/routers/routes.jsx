@@ -1,18 +1,17 @@
 import MainLayout from '../layouts/MainLayout';
-import { AuthenticateUsers } from '../utils';
+import { AuthenticateUsers, AuthenticateAdmins } from '../utils';
 import {
   Home,
   Profile,
   SignIn,
   SignUp,
-  AdminDashboard,
   EditUser,
   AddUser,
   DashUsers,
   NotFound,
-  CreatePost,
+  CreateBlog,
+  DashBoard,
 } from '../pages';
-import { AuthenticateAdmins } from '../utils/AuthenticateAdmins';
 
 export const routes = [
   {
@@ -27,22 +26,36 @@ export const routes = [
         children: [
           { index: true, element: <Home /> },
           { path: '/profile', element: <Profile /> },
-          { path: '/create-post', element: <CreatePost /> },
           {
-            path: '/admin-dashboard',
-            element: <AuthenticateAdmins />,
+            path: '/blog',
             children: [
               {
-                index: true,
-                element: <AdminDashboard />,
+                path: 'create-post',
+                element: <CreateBlog />,
               },
+            ],
+          },
+          {
+            path: '/dashboard',
+            element: <DashBoard />,
+            children: [
               {
-                path: 'edit-user/:id',
-                element: <EditUser />,
-              },
-              {
-                path: 'add-user',
-                element: <AddUser />,
+                path: 'admin',
+                element: <AuthenticateAdmins />,
+                children: [
+                  {
+                    index: true,
+                    element: <DashUsers />,
+                  },
+                  {
+                    path: 'edit-user/:id',
+                    element: <EditUser />,
+                  },
+                  {
+                    path: 'add-user',
+                    element: <AddUser />,
+                  },
+                ],
               },
             ],
           },
