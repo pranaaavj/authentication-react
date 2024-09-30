@@ -1,6 +1,7 @@
 import Form from 'react-bootstrap/Form';
 import { auth } from '../../config/firebaseConfig';
 import { setUser } from '../redux/slices/userSlice';
+import { useCustomToast } from '../hooks';
 import { validateSignIn } from '../utils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -14,6 +15,7 @@ const emptyForm = { email: '', password: '' };
 export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const showToast = useCustomToast();
   const provider = new GoogleAuthProvider();
   const { accessToken } = useSelector((state) => state.user);
   const [googleSignUp] = useGoogleSignUpMutation();
@@ -42,6 +44,7 @@ export const SignIn = () => {
     const response = await signIn(formData);
     if (response?.data?.success) {
       dispatch(setUser(response?.data?.data));
+      showToast('Signed in!', 'green');
       navigate('/');
     }
   };
@@ -55,10 +58,11 @@ export const SignIn = () => {
       username: displayName,
       photoURL,
     };
-    console.log(result.user);
+
     const response = await googleSignUp(user);
     if (response?.data?.success) {
       dispatch(setUser(response?.data?.data));
+      showToast('Signed in!', 'green');
       navigate('/');
     }
   };
@@ -104,7 +108,7 @@ export const SignIn = () => {
         />
         <SubmitButton
           variant='danger'
-          text={isLoading ? 'Loading...' : 'Sign In With Google'}
+          text='Sign In With Google'
           className='uppercase mt-3'
           type='reset'
           onClick={handleGoogleSignIn}

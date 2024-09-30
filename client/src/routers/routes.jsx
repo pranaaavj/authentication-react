@@ -8,6 +8,7 @@ import {
   AdminDashboard,
   EditUser,
   AddUser,
+  DashUsers,
 } from '../pages';
 import { AuthenticateAdmins } from '../utils/AuthenticateAdmins';
 import { NotFound } from '../pages/NotFound';
@@ -18,6 +19,8 @@ export const routes = [
     element: <MainLayout />,
     errorElement: <NotFound />,
     children: [
+      { path: '/sign-in', element: <SignIn /> },
+      { path: '/sign-up', element: <SignUp /> },
       {
         element: <AuthenticateUsers />,
         children: [
@@ -43,9 +46,10 @@ export const routes = [
           },
         ],
       },
-
-      { path: '/sign-in', element: <SignIn /> },
-      { path: '/sign-up', element: <SignUp /> },
     ],
+  },
+  {
+    path: '/tryout',
+    element: <DashUsers />,
   },
 ];

@@ -1,7 +1,9 @@
 export { Home } from './Home';
 export { SignUp } from './SignUp';
 export { SignIn } from './SignIn';
+export { AddUser } from './AddUser';
 export { Profile } from './Profile';
 export { EditUser } from './EditUser';
+export { DashUsers } from './DashUsers';
+export { DashSidebar } from './DashSidebar';
 export { AdminDashboard } from './AdminDashboard';
-export { AddUser } from './AddUser';

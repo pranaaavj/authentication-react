@@ -20,6 +20,7 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const [editMode, setEditMode] = useState(false);
   const { user } = useSelector((state) => state.user);
+  const [imageUrl, setImageUrl] = useState('');
   const [userInput, setUserInput] = useState(emptyForm);
   const [updateUser, { isError, error }] = useUpdateUserMutation();
 
@@ -32,8 +33,10 @@ export const Profile = () => {
   }, [user]);
 
   const handleChange = ({ target: { name, value, files } }) => {
-    if (files) setUserInput({ ...userInput, [name]: files[0] });
-    else setUserInput({ ...userInput, [name]: value });
+    if (files) {
+      setUserInput((prevInput) => ({ ...prevInput, [name]: files[0] }));
+      setImageUrl(() => URL.createObjectURL(files[0]));
+    } else setUserInput((prevInput) => ({ ...prevInput, [name]: value }));
   };
 
   const handleSave = async () => {
@@ -48,13 +51,15 @@ export const Profile = () => {
   };
 
   return (
-    <div className='flex justify-center items-center h-screen bg-gray-100'>
+    <div className='flex justify-center items-center'>
       <Card className='w-full max-w-lg p-6 bg-white shadow-lg rounded-lg'>
         <div className='flex flex-col items-center'>
           <div className='mb-2 flex flex-col items-center justify-center'>
             <img
               src={
-                user?.image.startsWith('https://')
+                imageUrl
+                  ? imageUrl
+                  : user?.image.startsWith('https://')
                   ? user.image
                   : `${import.meta.env.VITE_SERVER_URL}/uploads/${user.image}`
               }
@@ -119,6 +124,9 @@ export const Profile = () => {
                 Edit Profile
               </Button>
             )}
+            <Link to='create-post'>
+              <Button className='mx-2'>Create post</Button>
+            </Link>
           </div>
           <div className='mt-4'>
             {isError && (

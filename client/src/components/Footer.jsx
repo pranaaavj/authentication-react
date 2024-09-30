@@ -2,7 +2,7 @@ import { Button } from 'flowbite-react';
 
 export const Footer = () => {
   return (
-    <footer className='bg-gray-900 py-10 text-white'>
+    <footer className='bg-gray-900 py-10 text-white w-full'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center'>
         <h3 className='text-lg font-semibold mb-4'>Pen & Post</h3>
         <p className='text-sm text-gray-300 mb-6'>

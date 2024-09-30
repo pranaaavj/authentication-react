@@ -3,7 +3,14 @@ import { toggleTheme } from '../redux/slices/themeSlice';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaMoon, FaUserCircle, FaSun } from 'react-icons/fa';
+import {
+  FaMoon,
+  FaUserCircle,
+  FaSun,
+  FaUser,
+  FaCog,
+  FaSignOutAlt,
+} from 'react-icons/fa';
 import { Button, Navbar, Dropdown, TextInput } from 'flowbite-react';
 
 export const NavBar = () => {
@@ -62,20 +69,14 @@ export const NavBar = () => {
               className='text-white no-underline'>
               <Button gradientDuoTone='purpleToBlue'>Sign In</Button>
             </Link>
-          ) : (
-            <Button
-              gradientDuoTone='purpleToBlue'
-              onClick={() => dispatch(logout())}>
-              <span className='font-bold '>Logout</span>
-            </Button>
-          )}
+          ) : null}
 
           {user && (
             <Dropdown
               arrowIcon={false}
-              inline={true}
+              inline
               label={
-                user && user?.image ? (
+                user?.image ? (
                   <img
                     src={
                       user.image.startsWith('https://')
@@ -85,39 +86,47 @@ export const NavBar = () => {
                           }`
                     }
                     alt='Profile'
-                    className='w-10 h-10 rounded-full object-cover object-c/enter border-gray-300'
+                    className='w-10 h-10 rounded-full object-cover border-2 border-gray-200 hover:border-blue-500 transition-colors duration-200'
                   />
                 ) : (
-                  <FaUserCircle className='text-2xl  text-gray-600 dark:text-gray-300' />
+                  <FaUserCircle className='text-3xl text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors duration-200' />
                 )
-              }>
-              <Dropdown.Header className='no-underline p-0'>
-                <span className='block text-sm'>
-                  {' '}
-                  Username: {user?.username}
-                </span>
-                <span className='block text-sm font-medium truncate'>
-                  Email: {user?.email}
-                </span>
-              </Dropdown.Header>
-              {user?.role == 'admin' && (
+              }
+              className='z-50 pr-7 pt-1'>
+              <div className='px-4 py-3 text-sm text-gray-900 dark:text-white'>
+                <div className='font-medium truncate mb-1'>
+                  {user?.username}
+                </div>
+                <div className='text-gray-500 truncate dark:text-gray-400'>
+                  {user?.email}
+                </div>
+              </div>
+              <Dropdown.Divider />
+              {user?.role === 'admin' && (
                 <>
-                  <Dropdown.Item className='p-0 m-0'>
-                    <Link
-                      to='/admin-dashboard'
-                      className='no-underline'>
-                      Dashboard
-                    </Link>
+                  <Dropdown.Item
+                    as={Link}
+                    to='/admin-dashboard?tab=profile'
+                    className='flex items-center'>
+                    <FaCog className='mr-2' />
+                    Dashboard
                   </Dropdown.Item>
-                  <Dropdown.Divider className='p-0' />
+                  <Dropdown.Divider />
                 </>
               )}
-              <Dropdown.Item className='p-0'>
-                <Link
-                  to='/profile'
-                  className='no-underline'>
-                  Profile
-                </Link>
+              <Dropdown.Item
+                as={Link}
+                to='/profile'
+                className='flex items-center'>
+                <FaUser className='mr-2' />
+                Profile
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item
+                onClick={() => dispatch(logout())}
+                className='flex items-center text-red-600 hover:bg-red-100 dark:hover:bg-red-600 dark:hover:text-white'>
+                <FaSignOutAlt className='mr-2' />
+                Sign out
               </Dropdown.Item>
             </Dropdown>
           )}
