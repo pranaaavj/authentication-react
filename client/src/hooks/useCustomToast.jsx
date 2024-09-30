@@ -6,7 +6,6 @@ export const useCustomToast = () => {
 
   const showToast = (title, color) =>
     toast({
-      title: title,
       duration: 4000,
       isClosable: false,
       render: () => (
@@ -17,7 +16,7 @@ export const useCustomToast = () => {
           bg={`${color}.300`}
           borderRadius='md'
           fontSize='sm'>
-          Signed In!
+          {title}
         </Box>
       ),
     });

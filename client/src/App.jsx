@@ -8,12 +8,13 @@ import {
   createTheme,
 } from '@mui/material/styles';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 
 const router = createBrowserRouter(routes);
 
 const theme = createTheme({
   palette: {
-    mode: 'dark', // Or 'light', depending on your preference
+    mode: 'dark',
   },
   typography: {
     body1: {
@@ -30,7 +31,9 @@ export default function App() {
         loading={null}>
         <ThemeProvider>
           <MUIProvider theme={theme}>
-            <RouterProvider router={router} />
+            <ChakraProvider>
+              <RouterProvider router={router} />
+            </ChakraProvider>
           </MUIProvider>
         </ThemeProvider>
       </PersistGate>

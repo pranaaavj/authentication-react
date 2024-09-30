@@ -13,12 +13,12 @@ import { useSignInMutation, useGoogleSignUpMutation } from '../api/authApi';
 const emptyForm = { email: '', password: '' };
 
 export const SignIn = () => {
+  const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const showToast = useCustomToast();
-  const provider = new GoogleAuthProvider();
-  const { accessToken } = useSelector((state) => state.user);
   const [googleSignUp] = useGoogleSignUpMutation();
+  const { accessToken } = useSelector((state) => state.user);
   const [formData, setFormData] = useState(emptyForm);
   const [validation, setValidation] = useState(emptyForm);
   const [signIn, { isLoading, isError, error }] = useSignInMutation();

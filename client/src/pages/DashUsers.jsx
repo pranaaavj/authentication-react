@@ -48,7 +48,7 @@ export const DashUsers = () => {
             size='small'
             value={searchItem}
             onChange={(e) => setSearchItem(e.target.value)}
-            className='dark:bg-gray-700 dark:text-white rounded-lg focus:outline focus:ring-0 ring-0 focus:border-none'
+            className='dark:bg-gray-700 dark:text-white rounded-lg border border-1 focus:border-none'
           />
           <Button
             variant='contained'

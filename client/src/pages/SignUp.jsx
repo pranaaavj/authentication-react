@@ -4,8 +4,8 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSignUpMutation } from '../api/authApi';
 import { useEffect, useState } from 'react';
-import { InputField, SubmitButton, ErrorMessages } from '../components';
 import { validateSignUp, createFormData } from '../utils';
+import { InputField, SubmitButton, ErrorMessages } from '../components';
 
 const emptyForm = { username: '', email: '', password: '', image: '' };
 

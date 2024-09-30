@@ -9,9 +9,10 @@ import {
   EditUser,
   AddUser,
   DashUsers,
+  NotFound,
+  CreatePost,
 } from '../pages';
 import { AuthenticateAdmins } from '../utils/AuthenticateAdmins';
-import { NotFound } from '../pages/NotFound';
 
 export const routes = [
   {
@@ -26,6 +27,7 @@ export const routes = [
         children: [
           { index: true, element: <Home /> },
           { path: '/profile', element: <Profile /> },
+          { path: '/create-post', element: <CreatePost /> },
           {
             path: '/admin-dashboard',
             element: <AuthenticateAdmins />,
