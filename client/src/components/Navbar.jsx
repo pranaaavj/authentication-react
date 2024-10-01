@@ -93,7 +93,7 @@ export const NavBar = () => {
                 )
               }
               className='z-50 pr-7 pt-1'>
-              <div className='text-sm text-gray-900 dark:text-white text-center'>
+              <div className='px-4 py-3 text-sm text-gray-900 dark:text-white'>
                 <div className='font-medium truncate mb-1'>
                   {user?.username}
                 </div>

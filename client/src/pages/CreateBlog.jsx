@@ -1,6 +1,6 @@
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
-import { Box, Image } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/react';
 import { validateBlog } from '../utils';
 import { useCustomToast } from '../hooks';
@@ -91,6 +91,7 @@ export const CreateBlog = () => {
             ref={fileRef}
             onChange={handleBlogInput}
             accept='image/* '
+            hidden
           />
           <Button
             minWidth='200px'

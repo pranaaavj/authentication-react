@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import userSlice, { logout } from '../redux/slices/userSlice';
+import { logout } from '../redux/slices/userSlice';
 import { Sidebar } from 'flowbite-react';
-import { FaUserAlt } from 'react-icons/fa';
+import { FaUserAlt, FaUsers, FaSignOutAlt } from 'react-icons/fa';
+import { BsFilePost } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ export const DashSidebar = () => {
             active={tab == 'profile'}
             href='/dashboard?tab=profile'
             className='no-underline'
+            label={user.role == 'admin' ? 'Admin' : 'User'}
             icon={FaUserAlt}>
             Profile
           </Sidebar.Item>
@@ -36,13 +38,20 @@ export const DashSidebar = () => {
               active={tab === 'users'}
               className='no-underline'
               href='/dashboard?tab=users'
-              icon={FaUserAlt}>
+              icon={FaUsers}>
               Users
             </Sidebar.Item>
           )}
           <Sidebar.Item
+            active={tab == 'posts'}
+            href='/dashboard?tab=posts'
             className='no-underline'
-            icon={FaUserAlt}
+            icon={BsFilePost}>
+            Posts
+          </Sidebar.Item>
+          <Sidebar.Item
+            className='no-underline'
+            icon={FaSignOutAlt}
             onClick={() => dispatch(logout())}>
             Sign Out
           </Sidebar.Item>

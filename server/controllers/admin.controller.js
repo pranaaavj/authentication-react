@@ -1,6 +1,6 @@
 import User from '../models/user.model.js';
 /**
- * @route GET /api/users
+ * @route GET /api/admin/users
  * @desc Getting all the users
  * @access Private
  */
@@ -17,7 +17,7 @@ export const getAllUsers = async (req, res) => {
   });
 };
 /**
- * @route PATCH /api/users/:id
+ * @route PATCH /api/admin/users/:id
  * @desc Updating a single user
  * @access Private
  */
@@ -45,7 +45,7 @@ export const updateUser = async (req, res) => {
   });
 };
 /**
- * @route DELETE /api/users/:id
+ * @route DELETE /api/admin/users/:id
  * @desc Delete user
  * @access Private
  */

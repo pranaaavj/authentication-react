@@ -12,7 +12,14 @@ export const blogApi = createApi({
         body: blogData,
       }),
     }),
+    getAllBlogs: builder.query({
+      query: (userId) => ({
+        url: `/blog/all-posts`,
+        method: 'GET',
+        params: { userId },
+      }),
+    }),
   }),
 });
 
-export const { useCreateBlogMutation } = blogApi;
+export const { useCreateBlogMutation, useGetAllBlogsQuery } = blogApi;

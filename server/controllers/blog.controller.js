@@ -1,6 +1,6 @@
 import Blog from '../models/blog.model.js';
 /**
- * @route GET /api/blog/create-blog
+ * @route POST /api/blog/create-blog
  * @desc Create a new blog
  * @access Private
  */
@@ -8,6 +8,7 @@ export const createBlog = async (req, res) => {
   const { title, category, body } = req.body;
   const { userId } = req.user;
   const file = req?.file;
+  uploadFile(file);
   const newBlog = new Blog({
     userId,
     title,
@@ -22,4 +23,15 @@ export const createBlog = async (req, res) => {
     message: 'Blog created successfully',
     data: newBlog,
   });
+};
+/**
+ * @route GET /api/blog/all-posts
+ * @desc Return all the posts
+ * @access Private
+ */
+export const getAllPosts = (req, res) => {
+  const { userId } = req.query;
+  console.log(userId);
+  console.log('hello');
+  res.send();
 };
